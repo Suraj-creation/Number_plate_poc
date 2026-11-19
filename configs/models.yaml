@@ -1,0 +1,61 @@
+vehicle:
+  id: RF-DETR Large
+  repository: https://github.com/roboflow/rf-detr
+  code_license: Apache-2.0
+  weight_license: Apache-2.0 (Nano through Large family per specification)
+plate_default:
+  id: justjuu/rtdetr-v2-license-plate-detection
+  revision: 0ca7598f58649fe4a27db22ad72dca7be70314b1
+  model_card: https://huggingface.co/justjuu/rtdetr-v2-license-plate-detection
+  declared_license: Apache-2.0
+plate_challenger:
+  id: yolo-v9-s-608-license-plate-end2end
+  repository: https://github.com/ankandrew/open-image-models
+  code_license: MIT
+  weight_license: unresolved; internal evaluation only
+ocr_default:
+  id: cct-s-v2-global-model
+  repository: https://github.com/ankandrew/fast-plate-ocr
+  code_license: MIT
+  weight_provenance: verify exact downloaded artifact; not presumed cleared for commercial use
+ocr_challenger:
+  id: subash1652007/indian-plate-ocr
+  weight_license: non-commercial research and education only
+  enabled_by_default: false
+tracking:
+  id: ByteTrack (Supervision implementation)
+  code_license: MIT
+artifacts:
+  rf_detr_large:
+    path: models/vehicle/rf-detr-large-2026.pth
+    url: https://storage.googleapis.com/rfdetr/rf-detr-large-2026.pth
+    sha256: 0f4e20e19a99c0f8a62b5685f57f6c8b5c371c59081feda6752a0561a79ccf38
+  cct_s_v2:
+    path: models/fast-plate-ocr/cct-s-v2-global-model/cct_s_v2_global.onnx
+    url: https://github.com/ankandrew/cnn-ocr-lp/releases/download/arg-plates/cct_s_v2_global.onnx
+    sha256: 384bbbd2cea3ef54761d3df70822ef3a349ee1a112aeafddbe0e3ba06bc6e47b
+  cct_s_v2_config:
+    path: models/fast-plate-ocr/cct-s-v2-global-model/cct_s_v2_global_plate_config.yaml
+    url: https://github.com/ankandrew/cnn-ocr-lp/releases/download/arg-plates/cct_s_v2_global_plate_config.yaml
+    sha256: 0335c74a305173bb6f393efed0fde03cadeaa0b649ed8e19f431016d8232d0a6
+  yolo_v9_s:
+    path: models/open-image-models/yolo-v9-s-608-license-plate-end2end/yolo-v9-s-608-license-plates-end2end.onnx
+    url: https://github.com/ankandrew/open-image-models/releases/download/assets/yolo-v9-s-608-license-plates-end2end.onnx
+    sha256: 2b878b38d9aa07b6ddc3ea75c4ffcb39869bc5c218e0a14002f60ab2f7b0be9a
+paddle_optional:
+  detector:
+    repository: PaddlePaddle/PP-OCRv5_server_det
+    revision: ca867c897ecbca8873081573a802ad70d499cb94
+    declared_weight_license: Apache-2.0
+    files:
+      inference.json: af5876933d8806a1b50d895867e0781e135cd92ff37381992828fc8d1b842d28
+      inference.pdiparams: 183146fe9d9910352f68482f623bcbbb9fa7b9e8fa1463b9ad288cef00524d2d
+      inference.yml: 28fb721efc3634fc8aa677e474b9602cb815a91cf569ef357a7a553d7b3ce685
+  recognizer:
+    repository: PaddlePaddle/en_PP-OCRv5_mobile_rec
+    revision: 267c36e24c331595590fe7bd72bde2436fd286f2
+    declared_weight_license: Apache-2.0
+    files:
+      inference.json: fd1b6ec722ea841a72d3ba43e527df1d1066d5d7808e0503ee3eec7265188753
+      inference.pdiparams: 3ec8a97ed6cefe8568d3e2ee90bb193299b566a7661aa4fd52d224b96b59f66b
+      inference.yml: 27e91d0582f40168aa218303c76e184bc78fa7a5d105aad0cfbad8458b441067

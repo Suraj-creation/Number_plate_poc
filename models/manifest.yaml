@@ -1,0 +1,164 @@
+downloaded_at_utc: '2026-11-19T08:13:55.924928+00:00'
+host_gpu:
+  torch: 2.3.1+cu118
+  cuda_available: true
+  devices:
+  - index: 0
+    name: NVIDIA GeForce GTX 1080 Ti
+    memory_gib: 10.9
+    capability: '6.1'
+    probe_ok: true
+  - index: 1
+    name: NVIDIA GeForce GTX 1080 Ti
+    memory_gib: 10.9
+    capability: '6.1'
+    probe_ok: true
+  cuda_runtime: '11.8'
+  torch_cuda_probe_ok: true
+  onnxruntime: 1.20.1
+  onnx_providers:
+  - TensorrtExecutionProvider
+  - CUDAExecutionProvider
+  - AzureExecutionProvider
+  - CPUExecutionProvider
+  onnx_cuda_preload_ok: null
+  onnx_cuda_preload_method: not_applicable
+models:
+  vehicle:
+    id: RF-DETR Large
+    repository: https://github.com/roboflow/rf-detr
+    model_license: Apache-2.0 per model documentation
+    license_url: https://roboflow.com/model-licenses/rf-detr
+    weight_path: models/vehicle/rf-detr-large-2026.pth
+  plate_default:
+    id: justjuu/rtdetr-v2-license-plate-detection
+    revision: 0ca7598f58649fe4a27db22ad72dca7be70314b1
+    declared_license: Apache-2.0
+    model_card: https://huggingface.co/justjuu/rtdetr-v2-license-plate-detection
+    directory: models/huggingface/hub/models--justjuu--rtdetr-v2-license-plate-detection/snapshots/0ca7598f58649fe4a27db22ad72dca7be70314b1
+    files:
+    - name: .gitattributes
+      sha256: 11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361
+      bytes: 1519
+    - name: README.md
+      sha256: 9f184377a3bb55c4432dbbb1c51ab14682d7044be77364e4e1029b2101e869ba
+      bytes: 3079
+    - name: config.json
+      sha256: 427324aeee2a8caab58f3f9a73fdec95d363c1e5bd2d00ab76de202e56c2b579
+      bytes: 2619
+    - name: model.safetensors
+      sha256: bf44ad41aee4b1716dc8e53bdcaf7cf31ebf626ca8af20d86b4630129d19d719
+      bytes: 171527460
+    - name: preprocessor_config.json
+      sha256: addc7f2f00f04f33a5b4ab7f8eee13c66a430348fa396c7a5f2d384da515f586
+      bytes: 724
+  ocr:
+    id: cct-s-v2-global-model
+    repository: https://github.com/ankandrew/fast-plate-ocr
+    code_license: MIT
+    weight_license: separate artifact/data provenance requires review
+    cache_path: models/fast-plate-ocr/cct-s-v2-global-model
+  plate_challenger:
+    id: yolo-v9-s-608-license-plate-end2end
+    repository: https://github.com/ankandrew/open-image-models
+    code_license: MIT
+    weight_license: unresolved; internal evaluation only
+  indian_trocr_research:
+    id: subash1652007/indian-plate-ocr
+    revision: 82232c6220919c8c60d148ad74eb13dbea37e260
+    license: non-commercial research and education only
+    directory: models/huggingface/hub/models--subash1652007--indian-plate-ocr/snapshots/82232c6220919c8c60d148ad74eb13dbea37e260/trocr_plate
+    excluded_artifacts:
+    - yolo_best.pt (AGPL-3.0) not downloaded
+  paddle_optional:
+    detector:
+      repository: PaddlePaddle/PP-OCRv5_server_det
+      revision: ca867c897ecbca8873081573a802ad70d499cb94
+      declared_weight_license: Apache-2.0
+      files:
+        inference.json: af5876933d8806a1b50d895867e0781e135cd92ff37381992828fc8d1b842d28
+        inference.pdiparams: 183146fe9d9910352f68482f623bcbbb9fa7b9e8fa1463b9ad288cef00524d2d
+        inference.yml: 28fb721efc3634fc8aa677e474b9602cb815a91cf569ef357a7a553d7b3ce685
+      directory: models/paddle/PP-OCRv5_server_det
+    recognizer:
+      repository: PaddlePaddle/en_PP-OCRv5_mobile_rec
+      revision: 267c36e24c331595590fe7bd72bde2436fd286f2
+      declared_weight_license: Apache-2.0
+      files:
+        inference.json: fd1b6ec722ea841a72d3ba43e527df1d1066d5d7808e0503ee3eec7265188753
+        inference.pdiparams: 3ec8a97ed6cefe8568d3e2ee90bb193299b566a7661aa4fd52d224b96b59f66b
+        inference.yml: 27e91d0582f40168aa218303c76e184bc78fa7a5d105aad0cfbad8458b441067
+      directory: models/paddle/en_PP-OCRv5_mobile_rec
+release_assets:
+  rf_detr_large:
+    path: models/vehicle/rf-detr-large-2026.pth
+    url: https://storage.googleapis.com/rfdetr/rf-detr-large-2026.pth
+    sha256: 0f4e20e19a99c0f8a62b5685f57f6c8b5c371c59081feda6752a0561a79ccf38
+  cct_s_v2:
+    path: models/fast-plate-ocr/cct-s-v2-global-model/cct_s_v2_global.onnx
+    url: https://github.com/ankandrew/cnn-ocr-lp/releases/download/arg-plates/cct_s_v2_global.onnx
+    sha256: 384bbbd2cea3ef54761d3df70822ef3a349ee1a112aeafddbe0e3ba06bc6e47b
+  cct_s_v2_config:
+    path: models/fast-plate-ocr/cct-s-v2-global-model/cct_s_v2_global_plate_config.yaml
+    url: https://github.com/ankandrew/cnn-ocr-lp/releases/download/arg-plates/cct_s_v2_global_plate_config.yaml
+    sha256: 0335c74a305173bb6f393efed0fde03cadeaa0b649ed8e19f431016d8232d0a6
+  yolo_v9_s:
+    path: models/open-image-models/yolo-v9-s-608-license-plate-end2end/yolo-v9-s-608-license-plates-end2end.onnx
+    url: https://github.com/ankandrew/open-image-models/releases/download/assets/yolo-v9-s-608-license-plates-end2end.onnx
+    sha256: 2b878b38d9aa07b6ddc3ea75c4ffcb39869bc5c218e0a14002f60ab2f7b0be9a
+smoke_inference:
+  vehicle_model:
+    inference_succeeded: true
+    detections_on_blank: 0
+    device: cuda:1
+  plate_rtdetr:
+    inference_succeeded: true
+    detections_on_blank: 0
+    device: cuda:1
+  ocr_fast_plate:
+    inference_succeeded: true
+    returned_text: false
+    providers:
+    - CUDAExecutionProvider
+    - CPUExecutionProvider
+  results_are_accuracy_evidence: false
+  plate_yolov9:
+    inference_succeeded: true
+    detections_on_blank: 0
+    providers:
+    - CUDAExecutionProvider
+    - CPUExecutionProvider
+  indian_trocr:
+    inference_succeeded: true
+    returned_text: false
+    device: cuda:1
+weight_files:
+- path: models/fast-plate-ocr/cct-s-v2-global-model/cct_s_v2_global.onnx
+  bytes: 5262230
+  sha256: 384bbbd2cea3ef54761d3df70822ef3a349ee1a112aeafddbe0e3ba06bc6e47b
+- path: models/huggingface/hub/models--justjuu--rtdetr-v2-license-plate-detection/snapshots/0ca7598f58649fe4a27db22ad72dca7be70314b1/model.safetensors
+  bytes: 171527460
+  sha256: bf44ad41aee4b1716dc8e53bdcaf7cf31ebf626ca8af20d86b4630129d19d719
+- path: models/huggingface/hub/models--subash1652007--indian-plate-ocr/snapshots/82232c6220919c8c60d148ad74eb13dbea37e260/trocr_plate/model.safetensors
+  bytes: 246430696
+  sha256: e6b46417baadb91d391358045757b58b4303ec74df1772178e3e923ed91bd3c3
+- path: models/open-image-models/yolo-v9-s-608-license-plate-end2end/yolo-v9-s-608-license-plates-end2end.onnx
+  bytes: 28612350
+  sha256: 2b878b38d9aa07b6ddc3ea75c4ffcb39869bc5c218e0a14002f60ab2f7b0be9a
+- path: models/paddle/PP-OCRv5_server_det/inference.pdiparams
+  bytes: 87932887
+  sha256: 183146fe9d9910352f68482f623bcbbb9fa7b9e8fa1463b9ad288cef00524d2d
+- path: models/paddle/en_PP-OCRv5_mobile_rec/inference.pdiparams
+  bytes: 7772315
+  sha256: 3ec8a97ed6cefe8568d3e2ee90bb193299b566a7661aa4fd52d224b96b59f66b
+- path: models/vehicle/rf-detr-large-2026.pth
+  bytes: 135954129
+  sha256: 0f4e20e19a99c0f8a62b5685f57f6c8b5c371c59081feda6752a0561a79ccf38
+package_versions:
+  rfdetr: 1.5.2
+  transformers: 4.57.6
+  supervision: 0.30.0
+  fast-plate-ocr: 1.1.0
+  open-image-models: 0.6.0
+  fast-alpr: 0.4.0
+  onnxruntime-gpu: 1.20.1

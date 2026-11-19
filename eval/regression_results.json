@@ -1,0 +1,971 @@
+{
+  "dataset_revision": "2bb7cd4e46e58af4f6fa413ce8e205ac69e605a7",
+  "plate_and_text_evaluation": {
+    "baseline-rt-expanded": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 55,
+      "matched_detections": 31,
+      "plate_recall": 0.9393939393939394,
+      "plate_precision": 0.5636363636363636,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 8,
+      "ocr_exact_match": 0.34782608695652173,
+      "ocr_end_to_end_exact_match": 0.32,
+      "character_error_rate": 0.215962441314554,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 5,
+      "false_confident_reads": 1,
+      "false_confident_read_rate": 0.2,
+      "unmatched_confident_reads": 1,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.18181818181818182,
+      "missing_candidate_rate": 0.18181818181818182,
+      "mean_frame_latency_ms": 885.08,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 9,
+        "UNASSOCIATED": 5,
+        "LOW_CONFIDENCE": 31,
+        "UNREADABLE": 10
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 26,
+          "plate_recall": 0.9629629629629629,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 7
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": null,
+        "vehicle_crop": null,
+        "tile": null
+      }
+    },
+    "baseline-yolo": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 40,
+      "matched_detections": 30,
+      "plate_recall": 0.9090909090909091,
+      "plate_precision": 0.75,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 22,
+      "ocr_exact_matches": 10,
+      "ocr_exact_match": 0.45454545454545453,
+      "ocr_end_to_end_exact_match": 0.4,
+      "character_error_rate": 0.17733990147783252,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 7,
+      "false_confident_reads": 1,
+      "false_confident_read_rate": 0.14285714285714285,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.05,
+      "missing_candidate_rate": 0.05,
+      "mean_frame_latency_ms": 421.86,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 10,
+        "UNASSOCIATED": 4,
+        "LOW_CONFIDENCE": 24,
+        "UNREADABLE": 2,
+        "NO_PLATE_DETECTED": 1
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 2
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 25,
+          "plate_recall": 0.9259259259259259,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 17,
+          "ocr_exact_matches": 8
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": null,
+        "vehicle_crop": null,
+        "tile": null
+      }
+    },
+    "hardened-yolo": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 40,
+      "matched_detections": 30,
+      "plate_recall": 0.9090909090909091,
+      "plate_precision": 0.75,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 22,
+      "ocr_exact_matches": 10,
+      "ocr_exact_match": 0.45454545454545453,
+      "ocr_end_to_end_exact_match": 0.4,
+      "character_error_rate": 0.17733990147783252,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 6,
+      "false_confident_reads": 1,
+      "false_confident_read_rate": 0.16666666666666666,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.05,
+      "missing_candidate_rate": 0.05,
+      "mean_frame_latency_ms": 478.57,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 8,
+        "UNASSOCIATED": 12,
+        "LOW_CONFIDENCE": 18,
+        "NO_PLATE_DETECTED": 40,
+        "UNREADABLE": 2
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 2
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 25,
+          "plate_recall": 0.9259259259259259,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 17,
+          "ocr_exact_matches": 8
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 29,
+        "vehicle_crop": 26,
+        "tile": 0
+      }
+    },
+    "hardened-rt-final": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 55,
+      "matched_detections": 31,
+      "plate_recall": 0.9393939393939394,
+      "plate_precision": 0.5636363636363636,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 8,
+      "ocr_exact_match": 0.34782608695652173,
+      "ocr_end_to_end_exact_match": 0.32,
+      "character_error_rate": 0.215962441314554,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 4,
+      "false_confident_reads": 0,
+      "false_confident_read_rate": 0.0,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.14545454545454545,
+      "missing_candidate_rate": 0.18181818181818182,
+      "mean_frame_latency_ms": 901.02,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 6,
+        "UNASSOCIATED": 20,
+        "LOW_CONFIDENCE": 21,
+        "NO_PLATE_DETECTED": 35,
+        "UNREADABLE": 8
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 26,
+          "plate_recall": 0.9629629629629629,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 7
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 28,
+        "vehicle_crop": 27,
+        "tile": 0
+      }
+    },
+    "recovery-rt-final": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 81,
+      "matched_detections": 31,
+      "plate_recall": 0.9393939393939394,
+      "plate_precision": 0.38271604938271603,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 7,
+      "ocr_exact_match": 0.30434782608695654,
+      "ocr_end_to_end_exact_match": 0.28,
+      "character_error_rate": 0.20187793427230047,
+      "end_to_end_character_error_rate": 0.26406926406926406,
+      "evaluated_confident_reads": 1,
+      "false_confident_reads": 0,
+      "false_confident_read_rate": 0.0,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.1111111111111111,
+      "missing_candidate_rate": 0.2962962962962963,
+      "mean_frame_latency_ms": 2169.89,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 3,
+        "UNASSOCIATED": 54,
+        "NO_PLATE_DETECTED": 74,
+        "LOW_CONFIDENCE": 15,
+        "UNREADABLE": 9
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 26,
+          "plate_recall": 0.9629629629629629,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 6
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 28,
+        "vehicle_crop": 29,
+        "tile": 28
+      }
+    },
+    "hardened-paddle": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 55,
+      "matched_detections": 31,
+      "plate_recall": 0.9393939393939394,
+      "plate_precision": 0.5636363636363636,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 8,
+      "ocr_exact_match": 0.34782608695652173,
+      "ocr_end_to_end_exact_match": 0.32,
+      "character_error_rate": 0.215962441314554,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 4,
+      "false_confident_reads": 0,
+      "false_confident_read_rate": 0.0,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.12727272727272726,
+      "missing_candidate_rate": 0.18181818181818182,
+      "mean_frame_latency_ms": 2512.11,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 6,
+        "UNASSOCIATED": 20,
+        "LOW_CONFIDENCE": 22,
+        "NO_PLATE_DETECTED": 35,
+        "UNREADABLE": 7
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 26,
+          "plate_recall": 0.9629629629629629,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 7
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 28,
+        "vehicle_crop": 27,
+        "tile": 0
+      }
+    },
+    "standard-production": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 55,
+      "matched_detections": 31,
+      "plate_recall": 0.9393939393939394,
+      "plate_precision": 0.5636363636363636,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 8,
+      "ocr_exact_match": 0.34782608695652173,
+      "ocr_end_to_end_exact_match": 0.32,
+      "character_error_rate": 0.215962441314554,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 4,
+      "false_confident_reads": 0,
+      "false_confident_read_rate": 0.0,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.14545454545454545,
+      "missing_candidate_rate": 0.18181818181818182,
+      "mean_frame_latency_ms": 617.86,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 6,
+        "UNASSOCIATED": 20,
+        "LOW_CONFIDENCE": 21,
+        "NO_PLATE_DETECTED": 35,
+        "UNREADABLE": 8
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 26,
+          "plate_recall": 0.9629629629629629,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 7
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 28,
+        "vehicle_crop": 27,
+        "tile": 0
+      }
+    },
+    "recovery-production": {
+      "annotated_frames": 28,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 33,
+      "plate_predictions": 83,
+      "matched_detections": 31,
+      "plate_recall": 0.9393939393939394,
+      "plate_precision": 0.37349397590361444,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 7,
+      "ocr_exact_match": 0.30434782608695654,
+      "ocr_end_to_end_exact_match": 0.28,
+      "character_error_rate": 0.20187793427230047,
+      "end_to_end_character_error_rate": 0.26406926406926406,
+      "evaluated_confident_reads": 1,
+      "false_confident_reads": 0,
+      "false_confident_read_rate": 0.0,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.10843373493975904,
+      "missing_candidate_rate": 0.2891566265060241,
+      "mean_frame_latency_ms": 1400.36,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "UNASSOCIATED": 57,
+        "NO_PLATE_DETECTED": 77,
+        "READ": 2,
+        "LOW_CONFIDENCE": 15,
+        "UNREADABLE": 9
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 27,
+          "matched_detections": 26,
+          "plate_recall": 0.9629629629629629,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 6
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 28,
+        "vehicle_crop": 29,
+        "tile": 28
+      }
+    }
+  },
+  "ocr_on_publisher_boxes": {
+    "publisher_text_labels": 25,
+    "label_characters": 231,
+    "width_range_px": [
+      31,
+      2093
+    ],
+    "counts": {
+      "cct_exact": 9,
+      "cct_edits": 52,
+      "flattened_attempts": 1,
+      "flattened_exact": 0,
+      "flattened_losses": 1,
+      "correct_alternative_when_original_wrong": 0,
+      "trocr_exact": 7,
+      "trocr_edits": 114,
+      "readers_agree_correct": 2,
+      "readers_agree_wrong": 0,
+      "paddle_exact": 13,
+      "paddle_edits": 54,
+      "paddle_agrees_with_cct_correct": 4,
+      "paddle_agrees_with_cct_wrong": 0,
+      "paddle_above_gate": 21,
+      "paddle_exact_above_gate": 12,
+      "local_contrast_attempts": 6,
+      "local_contrast_exact": 0,
+      "local_contrast_losses": 1
+    },
+    "mean_latency_ms": {
+      "cct": 31.04,
+      "trocr": 330.06,
+      "paddle": 1052.23
+    }
+  },
+  "media_integrity": {
+    "night-validated": {
+      "status": "COMPLETE",
+      "decoded": 159,
+      "analyzed": 159,
+      "encoded": 159,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 2685,
+      "tracks": 105,
+      "frame_statuses": {
+        "LOW_CONFIDENCE": 82,
+        "UNREADABLE": 419,
+        "UNASSOCIATED": 296,
+        "NO_PLATE_DETECTED": 1888
+      },
+      "track_statuses": {
+        "UNREADABLE": 84,
+        "LOW_CONFIDENCE": 21
+      },
+      "wall_seconds": 167.685,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 132.418,
+          "p95": 178.954
+        },
+        "tracking": {
+          "mean": 6.041,
+          "p95": 8.965
+        },
+        "plate_detection": {
+          "mean": 843.663,
+          "p95": 1518.694
+        },
+        "ocr": {
+          "mean": 38.451,
+          "p95": 314.437
+        },
+        "total": {
+          "mean": 1027.151,
+          "p95": 1791.474
+        }
+      },
+      "torch_peak_mib": 780.0,
+      "device": "cuda:1"
+    },
+    "day-45-final": {
+      "status": "LIMIT_REACHED",
+      "decoded": 45,
+      "analyzed": 45,
+      "encoded": 45,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 362,
+      "tracks": 20,
+      "frame_statuses": {
+        "UNASSOCIATED": 87,
+        "LOW_CONFIDENCE": 28,
+        "NO_PLATE_DETECTED": 201,
+        "UNREADABLE": 46
+      },
+      "track_statuses": {
+        "LOW_CONFIDENCE": 8,
+        "UNREADABLE": 12
+      },
+      "wall_seconds": 36.221,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 120.166,
+          "p95": 155.633
+        },
+        "tracking": {
+          "mean": 3.593,
+          "p95": 5.374
+        },
+        "plate_detection": {
+          "mean": 600.28,
+          "p95": 1038.573
+        },
+        "ocr": {
+          "mean": 42.121,
+          "p95": 208.47
+        },
+        "total": {
+          "mean": 769.833,
+          "p95": 1243.062
+        }
+      },
+      "torch_peak_mib": 427.7,
+      "device": "cuda:1"
+    },
+    "parity-batch": {
+      "status": "LIMIT_REACHED",
+      "decoded": 30,
+      "analyzed": 30,
+      "encoded": 30,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 230,
+      "tracks": 14,
+      "frame_statuses": {
+        "UNASSOCIATED": 58,
+        "LOW_CONFIDENCE": 24,
+        "NO_PLATE_DETECTED": 121,
+        "UNREADABLE": 27
+      },
+      "track_statuses": {
+        "LOW_CONFIDENCE": 8,
+        "UNREADABLE": 6
+      },
+      "wall_seconds": 24.429,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 153.444,
+          "p95": 167.786
+        },
+        "tracking": {
+          "mean": 3.041,
+          "p95": 3.978
+        },
+        "plate_detection": {
+          "mean": 526.588,
+          "p95": 846.655
+        },
+        "ocr": {
+          "mean": 90.225,
+          "p95": 322.116
+        },
+        "total": {
+          "mean": 777.195,
+          "p95": 1285.538
+        }
+      },
+      "torch_peak_mib": 780.0,
+      "device": "cuda:0"
+    },
+    "day-batched": {
+      "status": "COMPLETE",
+      "decoded": 402,
+      "analyzed": 402,
+      "encoded": 402,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 12054,
+      "tracks": 311,
+      "frame_statuses": {
+        "UNASSOCIATED": 2141,
+        "LOW_CONFIDENCE": 1225,
+        "NO_PLATE_DETECTED": 6606,
+        "UNREADABLE": 2074,
+        "READ": 8
+      },
+      "track_statuses": {
+        "LOW_CONFIDENCE": 151,
+        "UNREADABLE": 160
+      },
+      "wall_seconds": 632.373,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 114.511,
+          "p95": 167.367
+        },
+        "tracking": {
+          "mean": 8.574,
+          "p95": 12.497
+        },
+        "plate_detection": {
+          "mean": 1371.459,
+          "p95": 2051.266
+        },
+        "ocr": {
+          "mean": 33.986,
+          "p95": 46.598
+        },
+        "total": {
+          "mean": 1538.561,
+          "p95": 2266.784
+        }
+      },
+      "torch_peak_mib": 780.0,
+      "device": "cuda:1"
+    },
+    "day-validated": {
+      "status": "COMPLETE",
+      "decoded": 402,
+      "analyzed": 402,
+      "encoded": 402,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 12054,
+      "tracks": 311,
+      "frame_statuses": {
+        "UNASSOCIATED": 2141,
+        "LOW_CONFIDENCE": 1225,
+        "NO_PLATE_DETECTED": 6606,
+        "UNREADABLE": 2074,
+        "READ": 8
+      },
+      "track_statuses": {
+        "LOW_CONFIDENCE": 151,
+        "UNREADABLE": 160
+      },
+      "wall_seconds": 426.806,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 86.169,
+          "p95": 103.135
+        },
+        "tracking": {
+          "mean": 7.146,
+          "p95": 10.56
+        },
+        "plate_detection": {
+          "mean": 901.458,
+          "p95": 1399.353
+        },
+        "ocr": {
+          "mean": 31.707,
+          "p95": 42.64
+        },
+        "total": {
+          "mean": 1034.441,
+          "p95": 1572.706
+        }
+      },
+      "torch_peak_mib": 780.0,
+      "device": "cuda:0"
+    }
+  },
+  "dependency_audit": {
+    "python": "3.10",
+    "packages": [
+      {
+        "name": "filelock",
+        "version": "4.1.0",
+        "advisory_ids": [
+          "CVE-2026-112906",
+          "CVE-2026-112907",
+          "CVE-2026-112908",
+          "CVE-2026-112909",
+          "CVE-2026-112910",
+          "CVE-2026-112911",
+          "CVE-2026-112912",
+          "CVE-2026-112913",
+          "CVE-2026-112914",
+          "CVE-2026-112915",
+          "CVE-2026-112934",
+          "CVE-2026-112935",
+          "CVE-2026-112937",
+          "CVE-2026-112938",
+          "CVE-2026-112939",
+          "CVE-2026-112940",
+          "CVE-2026-112941"
+        ]
+      },
+      {
+        "name": "pillow",
+        "version": "12.3.0",
+        "advisory_ids": [
+          "CVE-2026-112390",
+          "CVE-2026-112391",
+          "CVE-2026-112393",
+          "CVE-2026-112395",
+          "CVE-2026-112399",
+          "CVE-2026-112400",
+          "CVE-2026-112401",
+          "CVE-2026-112404",
+          "CVE-2026-112406",
+          "CVE-2026-112891",
+          "CVE-2026-112892",
+          "CVE-2026-112893",
+          "CVE-2026-112894",
+          "CVE-2026-112895",
+          "CVE-2026-112897",
+          "CVE-2026-112899",
+          "CVE-2026-112900",
+          "CVE-2026-128066",
+          "CVE-2026-128067",
+          "CVE-2026-96638",
+          "CVE-2026-96640",
+          "CVE-2026-96778",
+          "GHSA-78g4-xqwv-q3g8",
+          "PYSEC-2026-4326",
+          "PYSEC-2026-4327",
+          "PYSEC-2026-4328",
+          "PYSEC-2026-4329",
+          "PYSEC-2026-4330",
+          "PYSEC-2026-4331",
+          "PYSEC-2026-4332",
+          "PYSEC-2026-4333",
+          "PYSEC-2026-4334",
+          "PYSEC-2026-4335",
+          "PYSEC-2026-4336",
+          "PYSEC-2026-4337",
+          "PYSEC-2026-4338",
+          "PYSEC-2026-4339",
+          "PYSEC-2026-4340",
+          "PYSEC-2026-4341",
+          "PYSEC-2026-4342",
+          "PYSEC-2026-4343",
+          "PYSEC-2026-4363"
+        ]
+      },
+      {
+        "name": "transformers",
+        "version": "4.57.6",
+        "advisory_ids": [
+          "PYSEC-2025-217",
+          "PYSEC-2026-2288",
+          "PYSEC-2026-2289",
+          "PYSEC-2026-2290",
+          "PYSEC-2026-3929",
+          "PYSEC-2026-4174"
+        ]
+      }
+    ],
+    "unresolved_wheels": [
+      "onnxruntime-gpu",
+      "torch",
+      "torchvision"
+    ]
+  },
+  "full_day_thread_limit_parity": {
+    "matching_observations": 12054,
+    "total_observations": 12054,
+    "fields": [
+      "frame_index",
+      "vehicle_track_id",
+      "vehicle_bbox_xyxy",
+      "plate_bbox_xyxy",
+      "ocr_normalized",
+      "recognition_status"
+    ],
+    "unbounded_default_thread_wall_seconds": 632.373,
+    "bounded_thread_wall_seconds": 426.806
+  },
+  "tests": {
+    "python_tests_passed": 24,
+    "gpu_integration_enabled": true,
+    "chromium": [
+      "empty input",
+      "partial image batch",
+      "search",
+      "zip download",
+      "video review",
+      "active cancellation"
+    ],
+    "browser_cancellation_preserved_frames": 2,
+    "pip_check_passed": true
+  }
+}

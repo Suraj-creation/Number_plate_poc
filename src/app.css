@@ -1,0 +1,47 @@
+body, .gradio-container {
+    background: #eff4f4 !important;
+}
+.gradio-container {
+    max-width: 1420px !important;
+    padding: clamp(12px, 2.8vw, 38px) !important;
+}
+.anpr-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    padding: clamp(20px, 3vw, 40px);
+    border-radius: 18px;
+    background: #112a29;
+    color: #fff;
+}
+.anpr-header .product-name { color: #a2ded1; font-size: 13px; font-weight: 750; letter-spacing: .13em; }
+.anpr-header h1 { color: white; font-size: clamp(25px, 4vw, 42px); line-height: 1.14; margin: 10px 0; font-weight: 720; }
+.anpr-header p { color: #d6e8e5; margin: 0; font-size: 15px; }
+.runtime-pill { display: flex; align-items: center; gap: 7px; border: 1px solid #6b9790; border-radius: 999px; padding: 7px 11px; white-space: nowrap; font-size: 12px; color: #e3f2ef; }
+.runtime-pill span { width: 7px; height: 7px; border-radius: 50%; background: #8de1bf; }
+.gradio-container .main > .wrap { gap: 12px; }
+.work-area { gap: 14px !important; }
+.work-panel { background: var(--block-background-fill); border: 1px solid var(--border-color-primary); border-radius: 14px; padding: 14px; }
+.run-feedback { min-height: 2rem; }
+.metrics { display: grid; gap: 10px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.metrics > div { display: grid; padding: 12px 16px; border: 1px solid var(--border-color-primary); background: var(--block-background-fill); border-radius: 12px; }
+.metrics strong { font-size: 25px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.metrics span { font-size: 13px; margin-top: 5px; }
+.footer-note { padding: 4px 0 12px; color: var(--body-text-color-subdued); }
+@media (max-width: 680px) {
+    .work-area { flex-direction: column !important; flex-wrap: nowrap !important; }
+    .work-area .work-panel { flex: 0 0 auto !important; }
+    .anpr-header { flex-direction: column; }
+    .work-panel { min-width: 0 !important; width: 100%; }
+    .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.gradio-container {
+    --button-primary-background-fill: #087267 !important;
+    --button-primary-background-fill-hover: #075a52 !important;
+    --color-accent: #09685e !important;
+}
+.gradio-container :is(button, input, select, a):focus-visible {
+    outline: 2px solid #0b766a;
+    outline-offset: 3px;
+}

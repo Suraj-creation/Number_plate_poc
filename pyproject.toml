@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "india-anpr-poc"
+version = "0.2.0"
+description = "Local, pretrained-only Indian ANPR proof of concept"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+  "torch==2.3.1",
+  "torchvision==0.18.1",
+  "transformers==4.57.6",
+  "accelerate",
+  "safetensors",
+  "rfdetr==1.5.2",
+  "supervision==0.30.0",
+  "fast-plate-ocr[onnx-gpu]==1.1.0",
+  "open-image-models[onnx-gpu]==0.6.0",
+  "fast-alpr[onnx-gpu]==0.4.0",
+  "onnxruntime-gpu==1.20.1",
+  "gradio==6.17.3",
+  "pandas",
+  "pyyaml",
+  "opencv-python-headless==4.10.0.84",
+  "huggingface_hub==0.36.2",
+  "Pillow",
+  "python-dotenv",
+  "numpy==1.26.4",
+  "scipy==1.15.3",
+]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+src = ["app.css"]
