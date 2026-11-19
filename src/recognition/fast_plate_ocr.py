@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from src.utils.device import CudaUnavailable
 from src.utils.onnx_runtime import make_session_options, prepare_onnx_runtime
 
 
@@ -25,7 +26,7 @@ class FastPlateOCR:
         config_path = release_artifact("cct_s_v2_config")
         self.recognizer = LicensePlateRecognizer(onnx_model_path=model_path, plate_config_path=config_path, device=device, providers=providers, sess_options=make_session_options())
         if device == "cuda" and "CUDAExecutionProvider" not in self.recognizer.model.get_providers():
-            raise RuntimeError("Fast-Plate-OCR did not activate ONNX CUDAExecutionProvider; refusing silent CPU fallback.")
+            raise CudaUnavailable("Fast-Plate-OCR did not activate ONNX CUDAExecutionProvider.")
 
     def predict(self, bgr: np.ndarray) -> dict:
         return self.predict_many([bgr])[0]

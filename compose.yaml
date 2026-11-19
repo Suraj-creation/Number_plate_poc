@@ -1,0 +1,27 @@
+services:
+  anpr:
+    build: .
+    init: true
+    ports:
+      - "127.0.0.1:7860:7860"
+    environment:
+      ANPR_DEVICE: cpu
+      ANPR_OFFLINE: "1"
+      ANPR_UI_BIND: 0.0.0.0
+      ANPR_UI_PASSWORD_FILE: /run/secrets/anpr_ui_password
+      GRADIO_TEMP_DIR: /app/output/uploads
+    volumes:
+      - anpr_models:/app/models
+      - anpr_output:/app/output
+    secrets:
+      - anpr_ui_password
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+secrets:
+  anpr_ui_password:
+    file: ./.secrets/anpr_ui_password
+volumes:
+  anpr_models:
+  anpr_output:

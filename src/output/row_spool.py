@@ -10,8 +10,8 @@ from tempfile import TemporaryFile
 class RowSpool:
     """Replay observations from disk while retaining only a bounded preview."""
 
-    def __init__(self, preview_rows: int = 2000):
-        self.stream = TemporaryFile(mode="w+t", encoding="utf-8")
+    def __init__(self, preview_rows: int = 2000, *, directory=None):
+        self.stream = TemporaryFile(mode="w+t", encoding="utf-8", dir=directory)
         self.preview_rows = preview_rows
         self.preview = []
         self.fields = dict.fromkeys(("source", "frame_index", "timestamp_ms", "recognition_status"))

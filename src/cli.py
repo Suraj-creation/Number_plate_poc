@@ -21,13 +21,31 @@ log = logging.getLogger("india_anpr")
 
 def make_pipeline(cfg, plate_model, video=False):
     from src.pipeline.frame_pipeline import FramePipeline
+    from src.utils.device import CudaUnavailable
 
-    return FramePipeline(cfg, plate_model=plate_model, enable_tracking=video)
+    try:
+        pipe = FramePipeline(cfg, plate_model=plate_model, enable_tracking=video)
+    except CudaUnavailable:
+        if not cfg["allow_cpu_fallback"]:
+            raise
+        log.warning("CUDA startup probe failed for %s. Starting the explicitly permitted CPU fallback.", cfg["device"])
+        pipe = FramePipeline(dict(cfg, device="cpu"), plate_model=plate_model, enable_tracking=video)
+    pipe.execution = {"requested_device": cfg["device"], "effective_device": pipe.cfg["device"],
+                      "device_fallback": pipe.cfg["device"] != cfg["device"]}
+    return pipe
 
 
 def run_images(input_path: Path, output_dir: Path, cfg: dict, plate_model: str, progress=None,
                *, paths=None, cancelled=None) -> list[dict]:
+    from src.output.run_guard import output_run
+
+    with output_run(output_dir, cfg["min_output_free_mib"]):
+        return _run_images(input_path, output_dir, cfg, plate_model, progress, paths, cancelled)
+
+
+def _run_images(input_path, output_dir, cfg, plate_model, progress, paths, cancelled):
     from src.ingest.images import list_images, read_image
+    from src.output.run_guard import check_space
     from src.output.writers import write_results
 
     paths = list_images(input_path) if paths is None else paths
@@ -38,13 +56,13 @@ def run_images(input_path: Path, output_dir: Path, cfg: dict, plate_model: str, 
     if progress:
         progress(0, desc="Loading pretrained models")
     pipe = None
-    output_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
     all_results = []
     used_stems = set()
     try:
         for index, path in enumerate(paths):
             if cancelled and cancelled():
                 break
+            check_space(output_dir, cfg["min_output_free_mib"])
             try:
                 image = read_image(path, cfg["max_frame_pixels"])
             except (ValueError, OSError, cv2.error) as exc:
@@ -66,8 +84,8 @@ def run_images(input_path: Path, output_dir: Path, cfg: dict, plate_model: str, 
             out_path = output_dir / f"{output_stem}_annotated.png"
             if not cv2.imwrite(str(out_path), annotated):
                 raise OSError(f"Could not write annotated image: {out_path}")
-            result = write_results(str(path), rows, out_path, output_dir, "image", plate_model, cfg,
-                                   pipe.timings[-1:], output_stem=output_stem, crop_dir=pipe.crop_dir)
+            result = write_results(str(path), rows, out_path, output_dir, "image", plate_model, pipe.cfg,
+                                   pipe.timings[-1:], output_stem=output_stem, crop_dir=pipe.crop_dir, run_info=pipe.execution)
             all_results.append({"source": str(path), "observations": rows, **result})
             if progress:
                 progress((index + 1) / len(paths), desc=f"Image {index + 1}/{len(paths)}")
@@ -83,6 +101,7 @@ def run_video_cli(source: str, output_dir: Path, cfg: dict, plate_model: str, st
 
     from src.ingest.video import run_video
     from src.output.row_spool import RowSpool
+    from src.output.run_guard import output_run
     from src.output.writers import safe_source_stem, write_results
 
     local_file = not (source.isdecimal() or source.lower().startswith(("rtsp://", "rtsps://")))
@@ -94,16 +113,16 @@ def run_video_cli(source: str, output_dir: Path, cfg: dict, plate_model: str, st
     cfg = validate_config(dict(cfg, video_frame_stride=stride))
     if progress:
         progress(0, desc="Loading pretrained models")
-    pipe = make_pipeline(cfg, plate_model, video=True)
-    output_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
     stem = safe_source_stem(source)
     annotated = output_dir / f"{stem}_annotated.mp4"
-    pipe.crop_dir = output_dir / f"{stem}_crops" if cfg["save_plate_crops"] else None
-    info = {}
 
     with ExitStack() as resources:
+        resources.enter_context(output_run(output_dir, cfg["min_output_free_mib"]))
+        pipe = make_pipeline(cfg, plate_model, video=True)
         resources.callback(pipe.close)
-        spool = resources.enter_context(RowSpool(cfg["ui_preview_rows"]))
+        pipe.crop_dir = output_dir / f"{stem}_crops" if cfg["save_plate_crops"] else None
+        info = dict(pipe.execution)
+        spool = resources.enter_context(RowSpool(cfg["ui_preview_rows"], directory=output_dir))
         run_video(source, annotated, pipe, stride=stride, progress=progress, max_frames=max_frames,
                   max_duration_s=max_duration_s, row_sink=spool.add, cancelled=cancelled, run_info=info)
         if info["decoded_frames"] == 0:
@@ -111,10 +130,16 @@ def run_video_cli(source: str, output_dir: Path, cfg: dict, plate_model: str, st
                     "metadata": info, "observations": [], "tracks": []}
         if progress:
             progress(0.99, desc="Writing video, evidence and downloads")
-        tracks = pipe.finished_tracks + [pipe.track_state.finish(key) for key in list(pipe.track_state.active)]
+        end_reason = "END_OF_INPUT" if info["status"] == "COMPLETE" else info["status"]
+        tracks = pipe.finished_tracks + [pipe.track_state.finish(key, end_reason) for key in list(pipe.track_state.active)]
         info["status_counts"] = dict(spool.counts)
-        result = write_results(source, spool, annotated, output_dir, "video", plate_model, cfg, pipe.timings,
+        result = write_results(source, spool, annotated, output_dir, "video", plate_model, pipe.cfg, pipe.timings,
                                track_summaries=tracks, run_info=info, crop_dir=pipe.crop_dir)
+        log.info("Video result saved", extra={"anpr_metrics": {
+            "status": info["status"], "device": info["effective_device"],
+            "decoded_frames": info["decoded_frames"], "inferred_frames": info["inferred_frames"],
+            "duration_wall_s": info["duration_wall_s"], "observations": spool.count, "vehicle_tracks": len(tracks),
+        }})
         return {"observations": spool.preview, **result}
 
 
@@ -163,7 +188,7 @@ def run_fastalpr_baseline(input_path: Path, output_dir: Path, device: str = "cud
     return {"annotated": str(annotated), "json": str(json_path), "observations": rows}
 
 
-def download_models(include_yolo=True, smoke=False, research_ocr=False, paddle_ocr=False):
+def download_models(include_yolo=True, smoke=False, research_ocr=False, paddle_ocr=False, awiros_ocr=False):
     """Fetch pretrained model artifacts only and create a reproducible manifest."""
     from huggingface_hub import snapshot_download
     from src.detectors.plate import HF_MODEL, HF_REVISION
@@ -211,6 +236,10 @@ def download_models(include_yolo=True, smoke=False, research_ocr=False, paddle_o
         manifest["models"]["paddle_optional"] = {
             key: {**entry, "directory": project_path(entry["directory"])} for key, entry in paddle.items()
         }
+    if awiros_ocr:
+        from src.recognition.awiros_optional import awiros_assets
+        awiros = awiros_assets(download=True)
+        manifest["models"]["awiros_optional"] = {**awiros, "directory": project_path(awiros["directory"])}
     if smoke:
         # Actual model executions on a small neutral image confirm load/inference APIs and device placement.
         blank = 255 * (0 * __import__("numpy").ones((480, 640, 3), dtype="uint8"))
@@ -236,6 +265,19 @@ def download_models(include_yolo=True, smoke=False, research_ocr=False, paddle_o
             from src.recognition.indian_trocr_optional import IndianTrOCR
             trocr = IndianTrOCR(device=cfg["device"], local_dir=str(research_dir / "trocr_plate"))
             manifest["smoke_inference"]["indian_trocr"] = {"inference_succeeded": True, "returned_text": bool(trocr.predict(blank[:160, :420]).get("raw")), "device": cfg["device"]}
+        if awiros_ocr or paddle_ocr:
+            from contextlib import ExitStack
+            from src.recognition.awiros_optional import AwirosOCR
+            from src.recognition.paddleocr_fallback import PaddleOCRFallback
+
+            with ExitStack() as workers:
+                for enabled, name, reader_type in ((awiros_ocr, "awiros", AwirosOCR),
+                                                   (paddle_ocr, "paddleocr", PaddleOCRFallback)):
+                    if enabled:
+                        reader = reader_type()
+                        workers.callback(reader.close)
+                        output = reader.predict(blank[:160, :420])
+                        manifest["smoke_inference"][name] = {"inference_succeeded": True, "returned_text": bool(output.get("raw")), "device": "cpu"}
     # Record every downloaded model weight in the project cache with SHA-256.
     from src.utils.checksums import sha256_file
     manifest["weight_files"] = []
@@ -261,6 +303,7 @@ def main(argv=None):
     dl.add_argument("--smoke", action="store_true", help="Run real inference on a neutral blank image after download")
     dl.add_argument("--research-ocr", action="store_true", help="Also download and smoke-test the non-commercial Indian TrOCR reader (does not download AGPL plate detector)")
     dl.add_argument("--paddle-ocr", action="store_true", help="Install pinned PaddleOCR model artifacts into the local cache")
+    dl.add_argument("--awiros", action="store_true", help="Install the pinned experimental Awiros OCR assets")
     for name in ("image", "images"):
         p = sub.add_parser(name, help="Process one image or all images in a folder")
         p.add_argument("--input", required=True, type=Path)
@@ -290,7 +333,7 @@ def main(argv=None):
         print(json.dumps(report, indent=2))
         return 0 if report.get("torch_cuda_probe_ok") else 1
     if args.command == "download":
-        download_models(not args.no_yolo, args.smoke, args.research_ocr, args.paddle_ocr)
+        download_models(not args.no_yolo, args.smoke, args.research_ocr, args.paddle_ocr, args.awiros)
         return 0
     if args.command in {"image", "images", "video", "stream"}:
         cfg = load_config(args.config)
@@ -320,7 +363,7 @@ def main(argv=None):
         finally:
             signal.signal(signal.SIGINT, original)
         status = result["metadata"].get("status")
-        return 130 if status == "CANCELLED" else int(status == "PARTIAL_DECODE")
+        return 130 if status == "CANCELLED" else int(status in {"PARTIAL_DECODE", "RESOURCE_LIMIT"})
     if args.command == "ui":
         from src.app import launch
         launch()

@@ -25,3 +25,7 @@ models/paddle/
 
 *.egg-info/
 /codex-session-*.md
+
+models/awiros/
+
+.secrets/

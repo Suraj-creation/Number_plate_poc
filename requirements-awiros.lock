@@ -1,0 +1,12 @@
+# Install alongside requirements-paddle.lock in the isolated Paddle environment.
+# Requirements from the pinned PaddleOCR source used by the Awiros architecture.
+imageio==2.38.0
+lazy-loader==0.6
+lmdb==3.0.0
+networkx==3.4.2
+Polygon3==3.0.9.1
+safetensors==0.8.0
+scikit-image==0.25.2
+scipy==1.15.3
+shapely==2.1.2
+tifffile==2025.5.10

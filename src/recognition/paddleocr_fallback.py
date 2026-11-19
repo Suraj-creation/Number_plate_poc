@@ -4,9 +4,7 @@ import base64
 import json
 import os
 from pathlib import Path
-import subprocess
 import sys
-import weakref
 
 import cv2
 import numpy as np
@@ -37,50 +35,25 @@ def paddle_assets(download=False):
     return assets
 
 
-def _close_worker(worker):
-    if worker.stdin:
-        worker.stdin.close()
-    if worker.stdout:
-        worker.stdout.close()
-    try:
-        worker.wait(timeout=4)
-    except subprocess.TimeoutExpired:
-        worker.kill()
-        worker.wait()
-
-
 class PaddleOCRFallback:
     """Keep Paddle's CPU and OpenCV packages isolated from PyTorch and ORT."""
 
     def __init__(self):
+        from src.recognition.ocr_worker import OCRWorker
+
         python = os.getenv("ANPR_PADDLE_PYTHON")
         if not python:
             raise RuntimeError("Set ANPR_PADDLE_PYTHON to the Python executable of the optional PaddleOCR environment.")
         self.assets = paddle_assets()
-        worker = subprocess.Popen([python, "-u", "-m", __name__], cwd=Path(__file__).resolve().parents[2],
-                                  stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True, encoding="utf-8",
-                                  env={**os.environ, "PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK": "True"})
-        self.worker = worker
-        self.close = weakref.finalize(self, _close_worker, worker)
-        try:
-            self._receive()
-        except BaseException:
-            self.close()
-            raise
+        self.worker = OCRWorker(
+            python, "src.recognition.paddleocr_fallback", "ANPR_PADDLE",
+            root=Path(__file__).resolve().parents[2],
+            extra_env={"PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK": "True"},
+        )
+        self.close = self.worker.close
 
-    def _receive(self):
-        for line in self.worker.stdout:
-            if line.startswith("ANPR_PADDLE "):
-                return json.loads(line.removeprefix("ANPR_PADDLE "))
-        raise RuntimeError("The PaddleOCR worker exited. Check its installation and model cache.")
-
-    def predict(self, bgr: np.ndarray) -> dict:
-        ok, encoded = cv2.imencode(".png", bgr)
-        if not ok:
-            raise RuntimeError("Could not encode crop for PaddleOCR.")
-        self.worker.stdin.write(base64.b64encode(encoded).decode("ascii") + "\n")
-        self.worker.stdin.flush()
-        return self._receive()
+    def predict(self, crop) -> dict:
+        return self.worker.predict(crop)
 
 
 def _worker():

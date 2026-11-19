@@ -59,3 +59,12 @@ paddle_optional:
       inference.json: fd1b6ec722ea841a72d3ba43e527df1d1066d5d7808e0503ee3eec7265188753
       inference.pdiparams: 3ec8a97ed6cefe8568d3e2ee90bb193299b566a7661aa4fd52d224b96b59f66b
       inference.yml: 27e91d0582f40168aa218303c76e184bc78fa7a5d105aad0cfbad8458b441067
+awiros_optional:
+  repository: Awiros/anpr-ocr
+  revision: eadbc5ae4faa8284c8a547a60142fd555c3059ca
+  declared_weight_license: Apache-2.0
+  paddle_source_revision: fc82f229112a03aff46cc53db6166a98ea65a8fa
+  files:
+    model.safetensors: f9f1264e0c115a239ca6d6700a74ceffab17168b75dafc6c169c232012c68e47
+    en_dict.txt: 0a94bb85eb456a04aae7ba2505fde280818649440e122922adcc5f3ab073dc72
+    test.py: cc332442c9edb146d5a985dea9e5c2b799db16e3a361be5ea02d265af5a91b4d

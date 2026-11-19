@@ -12,8 +12,9 @@ def main():
     parser.add_argument("--predictions", required=True, type=Path)
     parser.add_argument("--ground-truth", required=True, type=Path)
     parser.add_argument("--iou", default=0.5, type=float)
+    parser.add_argument("--diagnostics", action="store_true", help="Include rank AP, localization errors and OCR selective risk")
     args = parser.parse_args()
-    print(json.dumps(evaluate(args.predictions, args.ground_truth, args.iou), indent=2))
+    print(json.dumps(evaluate(args.predictions, args.ground_truth, args.iou, detailed=args.diagnostics), indent=2))
 
 
 if __name__ == "__main__":

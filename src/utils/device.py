@@ -5,6 +5,10 @@ import logging
 log = logging.getLogger(__name__)
 
 
+class CudaUnavailable(RuntimeError):
+    """The requested CUDA execution environment failed initialization."""
+
+
 def device_report(probe: bool = True) -> dict:
     report = {"torch": None, "cuda_available": False, "devices": []}
     try:
@@ -51,11 +55,13 @@ def require_cuda(device: str) -> None:
     import torch
 
     if not torch.cuda.is_available():
-        raise RuntimeError("CUDA was requested but torch.cuda.is_available() is false. See `python -m src.cli doctor`.")
+        raise CudaUnavailable("CUDA was requested but torch.cuda.is_available() is false. See `python -m src.cli doctor`.")
     device_index = int(device.split(":", 1)[1]) if ":" in device else 0
+    if device_index >= torch.cuda.device_count():
+        raise CudaUnavailable(f"CUDA device {device_index} is unavailable. See `python -m src.cli doctor`.")
     try:
         probe = torch.nn.Conv2d(1, 1, 3, device=f"cuda:{device_index}")
         probe(torch.ones((1, 1, 8, 8), device=f"cuda:{device_index}"))
         torch.cuda.synchronize(device_index)
     except Exception as exc:
-        raise RuntimeError(f"CUDA device {device_index} is present but cannot run PyTorch inference: {exc}") from exc
+        raise CudaUnavailable(f"CUDA device {device_index} cannot run PyTorch inference: {exc}") from exc

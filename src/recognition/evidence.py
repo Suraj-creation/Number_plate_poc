@@ -58,7 +58,7 @@ def recognition_evidence(primary: dict, quality: dict, detection: dict, associat
         reasons.append("plate_at_frame_boundary")
     if detection["score"] < cfg["plate_read_threshold"]:
         reasons.append("plate_detector_below_read_gate")
-    independent = [item for item in alternatives if item.get("independent")]
+    independent = [item for item in alternatives if item.get("independent") and item.get("confidence_role") != "review_only"]
     disagreement = any(item["normalized"] and item["normalized"] != text and
                        (item.get("raw_score") or 0) >= cfg["paddle_evidence_threshold"] for item in independent)
     agreement = bool(text and any(item["normalized"] == text and
@@ -70,7 +70,7 @@ def recognition_evidence(primary: dict, quality: dict, detection: dict, associat
     strong = mean is not None and weakest is not None and mean >= cfg["ocr_read_threshold"] and weakest >= cfg["ocr_min_char_threshold"]
     support = mean is not None and weakest is not None and mean >= cfg["ocr_track_mean_threshold"] and weakest >= cfg["ocr_track_min_char_threshold"]
     if not strong:
-        reasons.append("primary_ocr_below_read_gate")
+        reasons.append("primary_ocr_below_read_gate" if weakest is not None else "primary_character_scores_unavailable")
     if association["state"] != "ASSOCIATED":
         reasons.append(association["state"].lower())
         status = "UNASSOCIATED"

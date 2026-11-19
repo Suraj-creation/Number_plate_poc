@@ -44,3 +44,41 @@ ANPR_OFFLINE=1 python -m eval.vehicle_tracking_benchmark kitti --root /data/kitt
 To compare OCR readers on the identical crops, prepare the private crop directory from the complete DataCluster sample and Standard RT-DETR JSON outputs with `python -m eval.ocr_challenger_benchmark prepare --dataset /data/datacluster --runs /tmp/standard --crops /tmp/ocr-study`. Run the same module with actions `cct`, `paddle`, or `trocr` to collect predictions. Awiros uses the publisher's inference script on each crop folder with the exact model and PaddleOCR source revisions in the aggregate JSON. Save its prediction JSON as `awiros_<crop-folder-name>.json` under the crop directory. Run the module's `score` action against that directory for aggregate results.
 
 The RT-DETRv2 plate checkpoint's publisher test split is available as a Parquet file at revision `b76dbba86154c33fa370bc3087fbc7c766845a66` of `justjuu/license-plate-detection`. With pyarrow 20.0 installed in the benchmark environment, run `python -m eval.plate_detector_benchmark --parquet /data/justjuu-test.parquet --output /tmp/plate_metrics.json`. Use `--model yolo-v9-s-608` for the evaluation-only challenger. This check uses full-frame inference and COCO box AP, with no tracker or OCR.
+
+## Production-readiness benchmark
+
+The [frozen protocol](protocols/india_round2.json) pins the baseline revision, publisher revision, identity-grouped development split and held-out profiles. Start with a private output directory. The crop directories, detailed result JSON and visual gallery contain original media and plate strings.
+
+```bash
+ANPR_OFFLINE=1 python -m eval.production_benchmark infer --dataset /data/datacluster --workspace /private/anpr-study
+for split in validation test; do
+  python -m eval.production_benchmark prepare --dataset /data/datacluster --workspace /private/anpr-study --split "$split"
+  ANPR_OFFLINE=1 python -m eval.production_benchmark read --engine cct --device cuda:0 --workspace /private/anpr-study --split "$split"
+  ANPR_OFFLINE=1 OPENBLAS_NUM_THREADS=4 OMP_NUM_THREADS=4 \
+    .venv-paddle/bin/python -m eval.production_benchmark read --engine awiros --workspace /private/anpr-study --split "$split"
+done
+python -m eval.production_benchmark score --dataset /data/datacluster --workspace /private/anpr-study --output /private/anpr-study/aggregate.json
+python -m eval.error_gallery --dataset /data/datacluster --workspace /private/anpr-study --output /private/anpr-study/gallery.html
+ANPR_OFFLINE=1 python -m eval.temporal_stress --cohort /private/anpr-study/test --output /private/anpr-study/stress.json --private-output /private/anpr-study/stress-cases.json
+```
+
+To reproduce the frozen platform before the changes, process the publisher images with the CLI from the pinned commit and put the exported JSON files in a private directory. From the current checkout run `python -m eval.production_benchmark import-exports --exports /private/frozen-exports --workspace /private/anpr-study` instead of the initial `infer` step. Use `--diagnostics` with `eval.run_eval` for ranked annotation AP, errors and confidence-risk tables against any compatible CSV.
+
+### Labeled Indian video
+
+Use the [original FANVID publisher index and HR/LR plate annotations](https://huggingface.co/datasets/kv1388/FANVID-Face_and_License_Plate_Recognition_in_Low-Resolution_Videos/tree/678a078/data). The study selects all nine clips from Mumbai and Bangalore in the publisher test split. Retrieve the two referenced source videos for local evaluation, using H.264, 720p and their original frame rates, and save each as `fanvid-h264-<YouTube ID>.mp4`. The published nominal frame counts can differ from the fractional video frame rate. Use the exact zero-based frame numbers from the CSV. The script validates the frame position and resolution before scoring. It repairs transposed top/right coordinates for the Bangalore clips and returns a separate Mumbai-only score against the unchanged annotations. Review four matching crops from each restored stream against the CSV before comparing a newly downloaded rendition.
+
+```bash
+for resolution in HR LR; do
+  name=$(printf '%s' "$resolution" | tr '[:upper:]' '[:lower:]')
+  ANPR_OFFLINE=1 python -m eval.fanvid_india --index /private/fanvid/index.csv \
+    --annotations "/private/fanvid/plates-${name}.csv" --media /private/fanvid --resolution "$resolution" \
+    --output "/private/anpr-study/fanvid-${name}.json" --private-output "/private/anpr-study/fanvid-${name}-cases.json"
+done
+python -m eval.fanvid_ocr prepare --index /private/fanvid/index.csv --media /private/fanvid \
+  --private /private/anpr-study/fanvid-hr-cases.json --directory /private/anpr-study/fanvid-crops
+ANPR_OFFLINE=1 OPENBLAS_NUM_THREADS=4 OMP_NUM_THREADS=4 .venv-paddle/bin/python -m eval.fanvid_ocr score \
+  --directory /private/anpr-study/fanvid-crops --output /private/anpr-study/fanvid-ocr.json
+```
+
+Each video clip has one designated target plate. Scores over target matches establish target recall and OCR errors. Distractor proposals are unverified. The labels identify target plates through time and have no vehicle boxes, so association precision and false event rates need a different reference. Report the 215 frame measurements alongside the nine clip measurements to show the amount of independent evidence.

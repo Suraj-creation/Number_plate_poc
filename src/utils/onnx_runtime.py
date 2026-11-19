@@ -4,6 +4,8 @@ import logging
 import ctypes
 from pathlib import Path
 
+from src.utils.device import CudaUnavailable
+
 log = logging.getLogger(__name__)
 
 
@@ -24,7 +26,7 @@ def prepare_onnx_runtime(device: str) -> None:
             for library in package_root.glob(f"**/lib/{pattern}"):
                 ctypes.CDLL(str(library), mode=ctypes.RTLD_GLOBAL)
     except Exception as exc:
-        raise RuntimeError(f"Could not preload CUDA/cuDNN libraries required by ONNX Runtime: {exc}") from exc
+        raise CudaUnavailable(f"Could not preload CUDA/cuDNN libraries required by ONNX Runtime: {exc}") from exc
 
     import onnxruntime as ort
 
@@ -34,7 +36,7 @@ def prepare_onnx_runtime(device: str) -> None:
     if hasattr(ort, "preload_dlls"):
         ort.preload_dlls(directory="")
     if "CUDAExecutionProvider" not in ort.get_available_providers():
-        raise RuntimeError("ONNX Runtime does not expose CUDAExecutionProvider.")
+        raise CudaUnavailable("ONNX Runtime does not expose CUDAExecutionProvider.")
     log.info("Loaded matching PyTorch and ONNX Runtime CUDA/cuDNN libraries")
 
 

@@ -7,7 +7,9 @@ from pathlib import Path
 
 import cv2
 
+from src.output.run_guard import OutputSpaceError, check_space
 from src.output.writers import make_video_writer
+from src.ingest.ffmpeg_video import Av1Capture
 
 log = logging.getLogger(__name__)
 
@@ -28,6 +30,7 @@ def run_video(source: str, output_path: Path, pipeline, stride: int = 1, progres
         max_frames = 900
     decode_options = [cv2.CAP_PROP_N_THREADS, pipeline.cfg["video_decoder_threads"]]
     capture = cv2.VideoCapture()
+    av1 = None
     writer = None
     index = sampled = 0
     rows = []
@@ -47,11 +50,16 @@ def run_video(source: str, output_path: Path, pipeline, stride: int = 1, progres
             capture.open(source)
         if not capture.isOpened():
             raise RuntimeError("Cannot open video/stream. Check the source, camera permissions and codec support.")
-        raw_fps = capture.get(cv2.CAP_PROP_FPS)
+        codec = int(capture.get(cv2.CAP_PROP_FOURCC)) if not live else 0
+        if codec in {cv2.VideoWriter_fourcc(*"av01"), cv2.VideoWriter_fourcc(*"AV01")}:
+            capture.release()
+            av1 = Av1Capture(source, pipeline.cfg["video_decoder_threads"], pipeline.cfg["max_frame_pixels"])
+            warnings.append("System FFmpeg decoded AV1. Export timestamps use the nominal frame rate.")
+        raw_fps = av1.fps if av1 else capture.get(cv2.CAP_PROP_FPS)
         fps = raw_fps if 0 < raw_fps < 300 else 25.0
         if fps != raw_fps:
             warnings.append("Source frame rate was unavailable. Output uses 25 FPS.")
-        frame_count = 0 if live else int(capture.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+        frame_count = av1.frame_count if av1 else 0 if live else int(capture.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
         started = time.monotonic()
         last_timestamp = -1
         target_frames = min(frame_count, frame_limit) if frame_count > 0 else frame_limit
@@ -67,9 +75,16 @@ def run_video(source: str, output_path: Path, pipeline, stride: int = 1, progres
             if max_duration_s is not None and elapsed >= max_duration_s:
                 status = "LIMIT_REACHED"
                 break
-            ok, frame = capture.read()
+            if index and index % 30 == 0:
+                try:
+                    check_space(output_path.parent, pipeline.cfg["min_output_free_mib"])
+                except OutputSpaceError as exc:
+                    status = "RESOURCE_LIMIT"
+                    warnings.append(str(exc))
+                    break
+            ok, frame = av1.read() if av1 else capture.read()
             if not ok:
-                if (live or frame_count > index) and index:
+                if (live or frame_count > index or (av1 and av1.failed)) and index:
                     status = "PARTIAL_DECODE"
                     warnings.append("Input stopped before the requested capture or advertised frame count.")
                 break
@@ -87,7 +102,7 @@ def run_video(source: str, output_path: Path, pipeline, stride: int = 1, progres
             if live:
                 timestamp = round((time.monotonic() - started) * 1000)
             else:
-                pts = capture.get(cv2.CAP_PROP_POS_MSEC)
+                pts = round(index * 1000 / fps) if av1 else capture.get(cv2.CAP_PROP_POS_MSEC)
                 timestamp = round(pts) if math.isfinite(pts) and pts >= 0 else -1
                 if timestamp <= last_timestamp:
                     timestamp = max(last_timestamp + 1, round(index * 1000 / fps))
@@ -112,6 +127,8 @@ def run_video(source: str, output_path: Path, pipeline, stride: int = 1, progres
                     progress(min(0.99, elapsed / max_duration_s), desc=desc)
                 else:
                     progress(min(0.99, index / target_frames), desc=desc)
+        if not index and av1 and av1.failed:
+            raise RuntimeError("System FFmpeg could not decode the AV1 file. Check that libdav1d is installed and the file is intact.")
         if not index and status != "CANCELLED":
             raise RuntimeError("Source opened, but no frames could be decoded.")
         if index:
@@ -129,9 +146,12 @@ def run_video(source: str, output_path: Path, pipeline, stride: int = 1, progres
                             advertised_frames=frame_count or None, fps=fps, stride=stride,
                             source_size=list(source_size) if index else None,
                             output_size=list(encoded_size) if index else None,
-                            duration_wall_s=round(time.monotonic() - started, 3), warnings=warnings)
+                            duration_wall_s=round(time.monotonic() - started, 3), warnings=warnings,
+                            decoder="ffmpeg_libdav1d" if av1 else "opencv")
     finally:
         capture.release()
+        if av1:
+            av1.release()
         if writer is not None:
             writer.release()
         partial_path.unlink(missing_ok=True)

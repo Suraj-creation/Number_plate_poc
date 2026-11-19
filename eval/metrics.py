@@ -57,7 +57,8 @@ def ratio(numerator, denominator):
     return numerator / denominator if denominator else None
 
 
-def evaluate(predictions_path: Path, ground_truth_path: Path, iou_threshold: float = 0.5) -> dict:
+def evaluate(predictions_path: Path, ground_truth_path: Path, iou_threshold: float = 0.5,
+             *, detailed: bool = False) -> dict:
     if not 0 < iou_threshold <= 1:
         raise ValueError("IoU threshold must be in (0, 1].")
     payload = json.loads(predictions_path.read_text(encoding="utf-8"))
@@ -70,6 +71,9 @@ def evaluate(predictions_path: Path, ground_truth_path: Path, iou_threshold: flo
         condition: evaluate_rows(payload, [row for row in truth if row.get("condition") == condition], iou_threshold)
         for condition in sorted({row["condition"] for row in truth if row.get("condition")})
     }
+    if detailed:
+        from eval.diagnostics import diagnose
+        scores["diagnostics"], _ = diagnose(payload, truth, iou_threshold)
     return scores
 
 
@@ -164,20 +168,29 @@ def evaluate_rows(payload, truth, threshold=0.5):
             if overlap[i, j]:
                 mapping[ref_keys[i]] = pred_ids[j]
     eligible = {key: next(iter(texts)) for key, texts in reference_texts.items() if len(texts) == 1}
-    track_read_count = track_wrong_reads = 0
+    track_read_count = track_wrong_reads = track_edits = track_chars = 0
+    stabilization_ms = []
     for key, label in eligible.items():
         track = run_tracks.get((key[0], mapping.get(key))) or (
             run_tracks.get((None, mapping.get(key))) if key[0] == only_source else None)
+        candidate = normalize_text(track.get("consensus")) if track else ""
+        track_edits += levenshtein(candidate, label)
+        track_chars += len(label)
         if track:
-            exact = normalize_text(track.get("consensus")) == label
+            exact = candidate == label
             correct_tracks += exact
             if track.get("recognition_status") == "READ":
                 track_read_count += 1
                 track_wrong_reads += not exact
+                first, stable = track.get("first_seen_ms"), track.get("stable_read_ms")
+                if exact and first is not None and stable is not None and stable >= first:
+                    stabilization_ms.append(stable - first)
     switches = 0
+    extra_ids = 0
     for evidence in trajectories.values():
         ids = [track for _, track in sorted(set(evidence))]
         switches += sum(a != b for a, b in zip(ids, ids[1:]))
+        extra_ids += len(set(ids)) - 1
     latency = payload.get("run_metadata", {}).get("performance_ms", {}).get("total", {}).get("mean")
     return {
         "annotated_frames": len(frame_truth), "ground_truth_vehicles": counts["gt_vehicles"],
@@ -196,8 +209,13 @@ def evaluate_rows(payload, truth, threshold=0.5):
         "association_labelled_matches": counts["association"], "association_legacy_id_matches": legacy_id_matches,
         "association_accuracy": ratio(counts["association_correct"], counts["association"]),
         "track_level_exact_match": ratio(correct_tracks, len(eligible)), "track_level_evaluable_count": len(eligible),
+        "track_level_character_error_rate": ratio(track_edits, track_chars),
         "track_false_confident_read_rate": ratio(track_wrong_reads, track_read_count),
         "matched_plate_track_id_switches": switches if trajectories else None,
+        "extra_predicted_ids_per_reference_total": extra_ids if trajectories else None,
+        "correct_stable_read_latency_ms": {"count": len(stabilization_ms),
+                                            "median": float(np.median(stabilization_ms)) if stabilization_ms else None,
+                                            "p95": float(np.percentile(stabilization_ms, 95)) if stabilization_ms else None},
         "unreadable_rate": ratio(counts["unreadable"], counts["predictions"]),
         "missing_candidate_rate": ratio(counts["candidate_missing"], counts["predictions"]),
         "mean_frame_latency_ms": latency, "estimated_pipeline_fps": 1000 / latency if latency else None,

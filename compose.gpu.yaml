@@ -1,0 +1,5 @@
+services:
+  anpr:
+    environment:
+      ANPR_DEVICE: "cuda:0"
+    gpus: all

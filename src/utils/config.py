@@ -11,7 +11,8 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
 PLATE_MODELS = ("rtdetr-v2-r50", "yolo-v9-s-608")
-OCR_MODELS = {"fast-plate-ocr": "cct-s-v2-global-model", "indian-trocr": "subash1652007/indian-plate-ocr"}
+OCR_MODELS = {"fast-plate-ocr": "cct-s-v2-global-model", "indian-trocr": "subash1652007/indian-plate-ocr",
+              "awiros": "Awiros/anpr-ocr"}
 
 
 def configure_caches() -> None:
@@ -50,8 +51,8 @@ def validate_config(cfg: dict) -> dict:
         raise ValueError("Unknown OCR engine.")
     if cfg["ocr_engine"] == "fast-plate-ocr" and cfg["ocr_model"] != OCR_MODELS["fast-plate-ocr"]:
         raise ValueError("Unknown Fast-Plate-OCR model.")
-    if cfg["ocr_engine"] == "indian-trocr":
-        cfg["ocr_model"] = OCR_MODELS["indian-trocr"]
+    if cfg["ocr_engine"] != "fast-plate-ocr":
+        cfg["ocr_model"] = OCR_MODELS[cfg["ocr_engine"]]
     for key, value in cfg.items():
         if key.endswith(("_threshold", "_margin", "_containment", "_fraction")):
             if isinstance(value, bool) or not isinstance(value, (float, int)) or not 0 <= value <= 1:
@@ -64,7 +65,9 @@ def validate_config(cfg: dict) -> dict:
     for key in ("blur_laplacian_min", "min_plate_contrast"):
         if type(cfg[key]) not in (int, float) or not math.isfinite(cfg[key]) or cfg[key] < 0:
             raise ValueError(f"{key} must be finite and non-negative.")
-    for key in ("save_plate_crops", "vehicle_tiles", "plate_tiles", "recovery_views", "paddle_ocr_fallback"):
+    if type(cfg["min_output_free_mib"]) is not int or cfg["min_output_free_mib"] < 0:
+        raise ValueError("min_output_free_mib must be a non-negative integer.")
+    for key in ("save_plate_crops", "vehicle_tiles", "plate_tiles", "recovery_views", "paddle_ocr_fallback", "allow_cpu_fallback", "awiros_review"):
         if type(cfg[key]) is not bool:
             raise ValueError(f"{key} must be true or false.")
     if cfg["plate_inference_batch_size"] > 8:
@@ -73,6 +76,8 @@ def validate_config(cfg: dict) -> dict:
         raise ValueError("CPU inference and decoder threads must be 1 to 32.")
     if cfg["paddle_ocr_fallback"] and cfg["ocr_engine"] != "fast-plate-ocr":
         raise ValueError("PaddleOCR second opinion requires the CCT-S primary reader.")
+    if cfg["awiros_review"] and cfg["ocr_engine"] != "fast-plate-ocr":
+        raise ValueError("Awiros review requires the CCT-S primary reader.")
     if cfg["write_video_fps"] != "source":
         raise ValueError("Only source FPS is supported for annotated output.")
     if cfg["track_history_size"] < cfg["minimum_consensus_observations"]:

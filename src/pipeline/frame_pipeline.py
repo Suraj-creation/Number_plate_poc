@@ -39,12 +39,18 @@ class FramePipeline:
         if cfg["ocr_engine"] == "indian-trocr":
             from src.recognition.indian_trocr_optional import IndianTrOCR
             self.ocr = IndianTrOCR(device=cfg["device"])
+        elif cfg["ocr_engine"] == "awiros":
+            from src.recognition.awiros_optional import AwirosOCR
+            self.ocr = AwirosOCR()
         else:
             self.ocr = FastPlateOCR(cfg["ocr_model"], device=cfg["device"])
-        self.paddle = None
-        if cfg["paddle_ocr_fallback"] and cfg["ocr_engine"] != "indian-trocr":
+        self.paddle = self.awiros_review = None
+        if cfg["paddle_ocr_fallback"]:
             from src.recognition.paddleocr_fallback import PaddleOCRFallback
             self.paddle = PaddleOCRFallback()
+        if cfg["awiros_review"]:
+            from src.recognition.awiros_optional import AwirosOCR
+            self.awiros_review = AwirosOCR()
         self.tracker = ByteTracker(cfg["tracker_track_activation_threshold"], cfg["tracker_lost_track_buffer"],
                                    cfg["tracker_match_threshold"]) if enable_tracking else None
         self.track_state = TrackState(cfg["track_history_size"], cfg)
@@ -55,10 +61,12 @@ class FramePipeline:
 
     def close(self):
         try:
-            if self.paddle is not None:
-                self.paddle.close()
+            for reader in (self.paddle, self.awiros_review, self.ocr):
+                close_reader = getattr(reader, "close", None)
+                if close_reader is not None:
+                    close_reader()
         finally:
-            self.paddle = self.ocr = self.plate = self.vehicle = None
+            self.paddle = self.awiros_review = self.ocr = self.plate = self.vehicle = None
             if self.cfg["device"].startswith("cuda"):
                 import torch
 
@@ -119,7 +127,7 @@ class FramePipeline:
             vehicles = [vehicle for vehicle in self.tracker.update(vehicles)
                         if vehicle["track_id"] is not None or vehicle["score"] >= self.cfg["vehicle_threshold"]]
             expiry = self.cfg["tracker_lost_track_buffer"] * self.cfg["video_frame_stride"]
-            self.finished_tracks.extend(self.track_state.seen(vehicles, self.frame_index, expiry))
+            self.finished_tracks.extend(self.track_state.seen(vehicles, self.frame_index, expiry, timestamp_ms))
         else:
             vehicles = [dict(vehicle, track_id=None) for vehicle in vehicles]
         stage("tracking")
@@ -164,17 +172,24 @@ class FramePipeline:
             track_id = row["vehicle_track_id"]
             vote = {}
             if track_id is not None:
-                vote = self.track_state.add(track_id, {
+                temporal_observation = {
                     "ocr_normalized": text, "quality_score": quality["quality_score"],
                     "crop_readable": not (quality["too_small"] or quality["blurry"] or clipped),
                     "supports_track_read": evidence["supports_track_read"],
                     "fingerprint": hashlib.blake2b(crop.tobytes(), digest_size=12).hexdigest(),
                     "frame_index": self.frame_index, "timestamp_ms": int(timestamp_ms),
-                })
+                }
+                vote = self.track_state.add(track_id, temporal_observation)
+                review_candidate = next((a["normalized"] for a in alternatives
+                                         if a.get("confidence_role") == "review_only" and a["normalized"]), None)
+                if review_candidate:
+                    self.track_state.add_review(track_id, {**temporal_observation, "ocr_normalized": review_candidate,
+                                                           "supports_track_read": False})
             row.update({
                 "plate_bbox_xyxy": box, "plate_crop_bbox_xyxy": expand_box(box, self.cfg["plate_crop_margin"], w, h),
                 "plate_source_pass": d["source_pass"], "plate_detection_passes": d["detection_passes"],
                 "plate_detection_confidence": d["score"], "ocr_raw": primary.get("raw"), "ocr_normalized": text or None,
+                "ocr_model_raw": primary.get("model_raw", primary.get("raw")),
                 "ocr_raw_score": primary.get("raw_score"), "ocr_char_probs": primary.get("char_probs"),
                 "ocr_slot_probs": primary.get("slot_probs"), "ocr_minimum_char_score": primary.get("minimum_char_score"),
                 "ocr_alternatives": alternatives, "ocr_secondary": next((a["raw"] for a in alternatives if a["independent"]), None),
@@ -226,6 +241,9 @@ class FramePipeline:
             if self.paddle and (not plausible or score < self.cfg["paddle_ocr_trigger_score"]
                                 or (primary.get("minimum_char_score") or 0) < self.cfg["ocr_min_char_threshold"]):
                 alternatives.append(("original", self.paddle.predict(crop), True))
+            if self.awiros_review:
+                prediction = self.awiros_review.predict(crop)
+                alternatives.append(("original", {**prediction, "confidence_role": "review_only"}, True))
         return [{**prediction, "view": label, "independent": independent,
                  "normalized": normalize_text(prediction.get("raw")) or None}
                 for label, prediction, independent in alternatives]

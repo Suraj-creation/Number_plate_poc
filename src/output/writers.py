@@ -91,7 +91,7 @@ def write_results(source: str, rows, annotated_path: Path, output_dir: Path, med
         metadata["model_manifest_sha256"] = sha256_file(model_manifest)
         metadata["model_revisions"] = {
             key: manifest.get("models", {}).get(key, {}).get("revision")
-            for key in ("plate_default", "indian_trocr_research")
+            for key in ("plate_default", "indian_trocr_research", "awiros_optional")
             if manifest.get("models", {}).get(key, {}).get("revision")
         }
         metadata["model_artifact_checksums"] = [

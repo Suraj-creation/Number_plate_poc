@@ -84,3 +84,38 @@ The [v0.2.0 release](https://github.com/Suraj-creation/Number_plate_poc/releases
 - **Weak reads.** Check the original plate resolution, angle, sharpness, and lighting. Inspect reasons, alternative predictions, and supporting frames before relying on a candidate. Scores and status gates are uncalibrated.
 
 See [known limitations and regression evidence](eval/hardening_results.md) before using this system for decisions that depend on plate accuracy.
+
+## Awiros OCR review
+
+Awiros is an experimental Indian plate reader. Its CPU runtime runs in a separate Paddle process. For operator review, choose **CCT-S + Awiros suggestions for review** or use `--config configs/review.yaml`. CCT remains the primary reader and Awiros displays a separate candidate on uncertain crops. Use `--config configs/awiros.yaml` to benchmark Awiros as the primary candidate reader. Its decoder provides a sequence score and no character scores, so the profile cannot authorize a READ.
+
+```bash
+.venv-paddle/bin/python -m pip install -r requirements-paddle.lock -r requirements-awiros.lock
+git clone https://github.com/PaddlePaddle/PaddleOCR.git /path/to/pinned-paddleocr
+git -C /path/to/pinned-paddleocr checkout --detach fc82f229112a03aff46cc53db6166a98ea65a8fa
+export ANPR_AWIROS_PADDLEOCR_DIR=/path/to/pinned-paddleocr
+export ANPR_PADDLE_PYTHON="$PWD/.venv-paddle/bin/python"
+.venv/bin/python -m src.cli download --no-yolo --awiros
+```
+
+The [production-readiness report](docs/Indian_ANPR_Production_Readiness_Report.docx) includes the paired results, labeled video performance and release blockers. The [evaluation guide](eval/README.md#production-readiness-benchmark) contains the reproduction commands.
+
+## Container deployment and recovery
+
+Docker Compose includes a CPU service and an NVIDIA override. The UI port is published to host loopback. Inside the container it binds to the network interface and requires an operator password. Create `.secrets/anpr_ui_password` with a unique password of at least 16 characters. Keep its parent directory mode `0700` and the file mode `0444` so the container's non-root user can read the mounted secret. Provision models once with network access, then start with the offline cache.
+
+```bash
+docker compose build
+docker compose run --rm -e ANPR_OFFLINE=0 anpr python -m src.cli download --no-yolo
+docker compose up -d
+# GPU deployment requires NVIDIA Container Toolkit and Compose 2.30 or newer.
+docker compose -f compose.yaml -f compose.gpu.yaml up -d
+```
+
+The Compose files were validated on this host. The Docker daemon socket denied access to the current account, so a container build and CUDA container smoke remain to be run. The service is a trusted-operator workspace with a shared output volume. Use TLS through an authenticated reverse proxy and separate instances or external storage isolation if separate operators must have independent data. Network binds disable server-side webcam and RTSP sources. Remove old exports and uploads under the deployment retention policy.
+
+Set `allow_cpu_fallback: true` in a CLI config to retry on CPU if the requested GPU startup probe or CUDA provider fails. The export records the requested and effective devices. Runtime inference failures stop the run. Use `min_output_free_mib` to reserve output storage. A video stopped by this limit retains the processed prefix when it can still be finalized. Separate CLI runs require separate output directories when used concurrently.
+
+Set `ANPR_LOG_FORMAT=json` for application logs with structured video completion counts and timings. External inference libraries may still emit their own log format.
+
+AV1 files with an `av01` codec tag use system FFmpeg with libdav1d. This path uses nominal-frame-rate timestamps. Remux or transcode unsupported files before processing. Review track first/last observations and stable READ timestamps in the track detail and JSON exports.

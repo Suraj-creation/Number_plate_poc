@@ -1,0 +1,1395 @@
+{
+  "evidence_date_local": "2026-11-19/2026-11-20 Asia/Kolkata",
+  "hardware": "2 NVIDIA GTX 1080 Ti 11 GiB each, CUDA 11.8",
+  "fanvid_annotation_revision": "678a078",
+  "fanvid_publisher": {
+    "720p": {
+      "scope": "publisher India test clips, partially labeled target plates",
+      "resolution": "HR",
+      "ocr": "fast-plate-ocr",
+      "clips": [
+        {
+          "source": "Mumbai_0",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 28,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_1",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 20,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_2",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 47,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_3",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 19,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_4",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 29,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Bangalore_0",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 17,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        },
+        {
+          "source": "Bangalore_1",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 23,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        },
+        {
+          "source": "Bangalore_2",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 16,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        },
+        {
+          "source": "Bangalore_3",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            1280,
+            720
+          ],
+          "inferred_frames": 16,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        }
+      ],
+      "inferred_frames": 215,
+      "wall_seconds": 88.67345861392096,
+      "metrics": {
+        "annotated_frames": 215,
+        "ground_truth_vehicles": 0,
+        "vehicle_recall": null,
+        "ground_truth_plates": 215,
+        "plate_predictions": 702,
+        "matched_detections": 116,
+        "plate_recall": 0.5395348837209303,
+        "plate_precision": 0.16524216524216523,
+        "ocr_labelled_plates": 215,
+        "ocr_labelled_matches": 116,
+        "ocr_exact_matches": 28,
+        "ocr_exact_match": 0.2413793103448276,
+        "ocr_end_to_end_exact_match": 0.13023255813953488,
+        "character_error_rate": 0.17758620689655172,
+        "end_to_end_character_error_rate": 0.5562790697674419,
+        "evaluated_confident_reads": 20,
+        "false_confident_reads": 0,
+        "false_confident_read_rate": 0.0,
+        "unmatched_confident_reads": 4,
+        "association_labelled_matches": 0,
+        "association_legacy_id_matches": 0,
+        "association_accuracy": null,
+        "track_level_exact_match": 0.4444444444444444,
+        "track_level_evaluable_count": 9,
+        "track_level_character_error_rate": 0.06666666666666667,
+        "track_false_confident_read_rate": 0.0,
+        "matched_plate_track_id_switches": 0,
+        "extra_predicted_ids_per_reference_total": 0,
+        "correct_stable_read_latency_ms": {
+          "count": 1,
+          "median": 2836.0,
+          "p95": 2836.0
+        },
+        "unreadable_rate": 0.22364672364672364,
+        "missing_candidate_rate": 0.42592592592592593,
+        "mean_frame_latency_ms": null,
+        "estimated_pipeline_fps": null,
+        "iou_threshold": 0.5
+      },
+      "detection": {
+        "reference_scope": "partial_annotations",
+        "references": 215,
+        "proposals": 702,
+        "matched": 116,
+        "annotation_match_precision": 0.16524216524216523,
+        "recall": 0.5395348837209303,
+        "annotation_match_f1": 0.2529989094874591,
+        "annotation_ap50": 0.3916708181603791,
+        "annotation_ap50_95": 0.14851071975394792,
+        "ranked_ap_prediction_floor": "submitted_proposals",
+        "mean_localization_iou": 0.7081608560274545,
+        "misses": 99,
+        "false_detections": null
+      },
+      "without_annotation_repair": {
+        "annotated_frames": 143,
+        "ground_truth_vehicles": 0,
+        "vehicle_recall": null,
+        "ground_truth_plates": 143,
+        "plate_predictions": 507,
+        "matched_detections": 45,
+        "plate_recall": 0.3146853146853147,
+        "plate_precision": 0.08875739644970414,
+        "ocr_labelled_plates": 143,
+        "ocr_labelled_matches": 45,
+        "ocr_exact_matches": 8,
+        "ocr_exact_match": 0.17777777777777778,
+        "ocr_end_to_end_exact_match": 0.055944055944055944,
+        "character_error_rate": 0.19777777777777777,
+        "end_to_end_character_error_rate": 0.7475524475524475,
+        "evaluated_confident_reads": 3,
+        "false_confident_reads": 0,
+        "false_confident_read_rate": 0.0,
+        "unmatched_confident_reads": 4,
+        "association_labelled_matches": 0,
+        "association_legacy_id_matches": 0,
+        "association_accuracy": null,
+        "track_level_exact_match": 0.2,
+        "track_level_evaluable_count": 5,
+        "track_level_character_error_rate": 0.08,
+        "track_false_confident_read_rate": 0.0,
+        "matched_plate_track_id_switches": 0,
+        "extra_predicted_ids_per_reference_total": 0,
+        "correct_stable_read_latency_ms": {
+          "count": 1,
+          "median": 2836.0,
+          "p95": 2836.0
+        },
+        "unreadable_rate": 0.2603550295857988,
+        "missing_candidate_rate": 0.46942800788954636,
+        "mean_frame_latency_ms": null,
+        "estimated_pipeline_fps": null,
+        "iou_threshold": 0.5
+      },
+      "by_region": {
+        "Mumbai": {
+          "annotated_frames": 143,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 143,
+          "plate_predictions": 507,
+          "matched_detections": 45,
+          "plate_recall": 0.3146853146853147,
+          "plate_precision": 0.08875739644970414,
+          "ocr_labelled_plates": 143,
+          "ocr_labelled_matches": 45,
+          "ocr_exact_matches": 8,
+          "ocr_exact_match": 0.17777777777777778,
+          "ocr_end_to_end_exact_match": 0.055944055944055944,
+          "character_error_rate": 0.19777777777777777,
+          "end_to_end_character_error_rate": 0.7475524475524475,
+          "evaluated_confident_reads": 3,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": 0.0,
+          "unmatched_confident_reads": 4,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 0.2,
+          "track_level_evaluable_count": 5,
+          "track_level_character_error_rate": 0.08,
+          "track_false_confident_read_rate": 0.0,
+          "matched_plate_track_id_switches": 0,
+          "extra_predicted_ids_per_reference_total": 0,
+          "correct_stable_read_latency_ms": {
+            "count": 1,
+            "median": 2836.0,
+            "p95": 2836.0
+          },
+          "unreadable_rate": 0.2603550295857988,
+          "missing_candidate_rate": 0.46942800788954636,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        },
+        "Bangalore": {
+          "annotated_frames": 72,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 72,
+          "plate_predictions": 195,
+          "matched_detections": 71,
+          "plate_recall": 0.9861111111111112,
+          "plate_precision": 0.3641025641025641,
+          "ocr_labelled_plates": 72,
+          "ocr_labelled_matches": 71,
+          "ocr_exact_matches": 20,
+          "ocr_exact_match": 0.28169014084507044,
+          "ocr_end_to_end_exact_match": 0.2777777777777778,
+          "character_error_rate": 0.1647887323943662,
+          "end_to_end_character_error_rate": 0.1763888888888889,
+          "evaluated_confident_reads": 17,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": 0.0,
+          "unmatched_confident_reads": 0,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 0.75,
+          "track_level_evaluable_count": 4,
+          "track_level_character_error_rate": 0.05,
+          "track_false_confident_read_rate": null,
+          "matched_plate_track_id_switches": 0,
+          "extra_predicted_ids_per_reference_total": 0,
+          "correct_stable_read_latency_ms": {
+            "count": 0,
+            "median": null,
+            "p95": null
+          },
+          "unreadable_rate": 0.1282051282051282,
+          "missing_candidate_rate": 0.3128205128205128,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        }
+      },
+      "by_vehicle_class": {
+        "Car": {
+          "annotated_frames": 198,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 198,
+          "plate_predictions": 662,
+          "matched_detections": 100,
+          "plate_recall": 0.5050505050505051,
+          "plate_precision": 0.1510574018126888,
+          "ocr_labelled_plates": 198,
+          "ocr_labelled_matches": 100,
+          "ocr_exact_matches": 25,
+          "ocr_exact_match": 0.25,
+          "ocr_end_to_end_exact_match": 0.12626262626262627,
+          "character_error_rate": 0.176,
+          "end_to_end_character_error_rate": 0.5838383838383838,
+          "evaluated_confident_reads": 17,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": 0.0,
+          "unmatched_confident_reads": 4,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 0.375,
+          "track_level_evaluable_count": 8,
+          "track_level_character_error_rate": 0.075,
+          "track_false_confident_read_rate": 0.0,
+          "matched_plate_track_id_switches": 0,
+          "extra_predicted_ids_per_reference_total": 0,
+          "correct_stable_read_latency_ms": {
+            "count": 1,
+            "median": 2836.0,
+            "p95": 2836.0
+          },
+          "unreadable_rate": 0.23564954682779457,
+          "missing_candidate_rate": 0.43202416918429004,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        },
+        "Van": {
+          "annotated_frames": 17,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 17,
+          "plate_predictions": 40,
+          "matched_detections": 16,
+          "plate_recall": 0.9411764705882353,
+          "plate_precision": 0.4,
+          "ocr_labelled_plates": 17,
+          "ocr_labelled_matches": 16,
+          "ocr_exact_matches": 3,
+          "ocr_exact_match": 0.1875,
+          "ocr_end_to_end_exact_match": 0.17647058823529413,
+          "character_error_rate": 0.1875,
+          "end_to_end_character_error_rate": 0.23529411764705882,
+          "evaluated_confident_reads": 3,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": 0.0,
+          "unmatched_confident_reads": 0,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 1.0,
+          "track_level_evaluable_count": 1,
+          "track_level_character_error_rate": 0.0,
+          "track_false_confident_read_rate": null,
+          "matched_plate_track_id_switches": 0,
+          "extra_predicted_ids_per_reference_total": 0,
+          "correct_stable_read_latency_ms": {
+            "count": 0,
+            "median": null,
+            "p95": null
+          },
+          "unreadable_rate": 0.025,
+          "missing_candidate_rate": 0.325,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        }
+      }
+    },
+    "320x180": {
+      "scope": "publisher India test clips, partially labeled target plates",
+      "resolution": "LR",
+      "ocr": "fast-plate-ocr",
+      "clips": [
+        {
+          "source": "Mumbai_0",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 28,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_1",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 20,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_2",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 47,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_3",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 19,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Mumbai_4",
+          "fps": 59.94005994005994,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 29,
+          "sample_every_source_frames": 10,
+          "annotation_repair": false
+        },
+        {
+          "source": "Bangalore_0",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 17,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        },
+        {
+          "source": "Bangalore_1",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 23,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        },
+        {
+          "source": "Bangalore_2",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 16,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        },
+        {
+          "source": "Bangalore_3",
+          "fps": 30.0,
+          "native_size": [
+            1280,
+            720
+          ],
+          "evaluation_size": [
+            320,
+            180
+          ],
+          "inferred_frames": 16,
+          "sample_every_source_frames": 5,
+          "annotation_repair": true
+        }
+      ],
+      "inferred_frames": 215,
+      "wall_seconds": 72.31031170813367,
+      "metrics": {
+        "annotated_frames": 215,
+        "ground_truth_vehicles": 0,
+        "vehicle_recall": null,
+        "ground_truth_plates": 215,
+        "plate_predictions": 484,
+        "matched_detections": 110,
+        "plate_recall": 0.5116279069767442,
+        "plate_precision": 0.22727272727272727,
+        "ocr_labelled_plates": 215,
+        "ocr_labelled_matches": 110,
+        "ocr_exact_matches": 0,
+        "ocr_exact_match": 0.0,
+        "ocr_end_to_end_exact_match": 0.0,
+        "character_error_rate": 0.8627272727272727,
+        "end_to_end_character_error_rate": 0.9297674418604651,
+        "evaluated_confident_reads": 0,
+        "false_confident_reads": 0,
+        "false_confident_read_rate": null,
+        "unmatched_confident_reads": 0,
+        "association_labelled_matches": 0,
+        "association_legacy_id_matches": 0,
+        "association_accuracy": null,
+        "track_level_exact_match": 0.0,
+        "track_level_evaluable_count": 9,
+        "track_level_character_error_rate": 0.8111111111111111,
+        "track_false_confident_read_rate": null,
+        "matched_plate_track_id_switches": 1,
+        "extra_predicted_ids_per_reference_total": 1,
+        "correct_stable_read_latency_ms": {
+          "count": 0,
+          "median": null,
+          "p95": null
+        },
+        "unreadable_rate": 0.30785123966942146,
+        "missing_candidate_rate": 0.5330578512396694,
+        "mean_frame_latency_ms": null,
+        "estimated_pipeline_fps": null,
+        "iou_threshold": 0.5
+      },
+      "detection": {
+        "reference_scope": "partial_annotations",
+        "references": 215,
+        "proposals": 484,
+        "matched": 110,
+        "annotation_match_precision": 0.22727272727272727,
+        "recall": 0.5116279069767442,
+        "annotation_match_f1": 0.3147353361945637,
+        "annotation_ap50": 0.3704785691068068,
+        "annotation_ap50_95": 0.12264427930951274,
+        "ranked_ap_prediction_floor": "submitted_proposals",
+        "mean_localization_iou": 0.69866817156707,
+        "misses": 105,
+        "false_detections": null
+      },
+      "without_annotation_repair": {
+        "annotated_frames": 143,
+        "ground_truth_vehicles": 0,
+        "vehicle_recall": null,
+        "ground_truth_plates": 143,
+        "plate_predictions": 348,
+        "matched_detections": 41,
+        "plate_recall": 0.2867132867132867,
+        "plate_precision": 0.11781609195402298,
+        "ocr_labelled_plates": 143,
+        "ocr_labelled_matches": 41,
+        "ocr_exact_matches": 0,
+        "ocr_exact_match": 0.0,
+        "ocr_end_to_end_exact_match": 0.0,
+        "character_error_rate": 0.8634146341463415,
+        "end_to_end_character_error_rate": 0.9608391608391609,
+        "evaluated_confident_reads": 0,
+        "false_confident_reads": 0,
+        "false_confident_read_rate": null,
+        "unmatched_confident_reads": 0,
+        "association_labelled_matches": 0,
+        "association_legacy_id_matches": 0,
+        "association_accuracy": null,
+        "track_level_exact_match": 0.0,
+        "track_level_evaluable_count": 5,
+        "track_level_character_error_rate": 0.84,
+        "track_false_confident_read_rate": null,
+        "matched_plate_track_id_switches": 1,
+        "extra_predicted_ids_per_reference_total": 1,
+        "correct_stable_read_latency_ms": {
+          "count": 0,
+          "median": null,
+          "p95": null
+        },
+        "unreadable_rate": 0.34195402298850575,
+        "missing_candidate_rate": 0.5977011494252874,
+        "mean_frame_latency_ms": null,
+        "estimated_pipeline_fps": null,
+        "iou_threshold": 0.5
+      },
+      "by_region": {
+        "Mumbai": {
+          "annotated_frames": 143,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 143,
+          "plate_predictions": 348,
+          "matched_detections": 41,
+          "plate_recall": 0.2867132867132867,
+          "plate_precision": 0.11781609195402298,
+          "ocr_labelled_plates": 143,
+          "ocr_labelled_matches": 41,
+          "ocr_exact_matches": 0,
+          "ocr_exact_match": 0.0,
+          "ocr_end_to_end_exact_match": 0.0,
+          "character_error_rate": 0.8634146341463415,
+          "end_to_end_character_error_rate": 0.9608391608391609,
+          "evaluated_confident_reads": 0,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": null,
+          "unmatched_confident_reads": 0,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 0.0,
+          "track_level_evaluable_count": 5,
+          "track_level_character_error_rate": 0.84,
+          "track_false_confident_read_rate": null,
+          "matched_plate_track_id_switches": 1,
+          "extra_predicted_ids_per_reference_total": 1,
+          "correct_stable_read_latency_ms": {
+            "count": 0,
+            "median": null,
+            "p95": null
+          },
+          "unreadable_rate": 0.34195402298850575,
+          "missing_candidate_rate": 0.5977011494252874,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        },
+        "Bangalore": {
+          "annotated_frames": 72,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 72,
+          "plate_predictions": 136,
+          "matched_detections": 69,
+          "plate_recall": 0.9583333333333334,
+          "plate_precision": 0.5073529411764706,
+          "ocr_labelled_plates": 72,
+          "ocr_labelled_matches": 69,
+          "ocr_exact_matches": 0,
+          "ocr_exact_match": 0.0,
+          "ocr_end_to_end_exact_match": 0.0,
+          "character_error_rate": 0.8623188405797102,
+          "end_to_end_character_error_rate": 0.8680555555555556,
+          "evaluated_confident_reads": 0,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": null,
+          "unmatched_confident_reads": 0,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 0.0,
+          "track_level_evaluable_count": 4,
+          "track_level_character_error_rate": 0.775,
+          "track_false_confident_read_rate": null,
+          "matched_plate_track_id_switches": 0,
+          "extra_predicted_ids_per_reference_total": 0,
+          "correct_stable_read_latency_ms": {
+            "count": 0,
+            "median": null,
+            "p95": null
+          },
+          "unreadable_rate": 0.22058823529411764,
+          "missing_candidate_rate": 0.36764705882352944,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        }
+      },
+      "by_vehicle_class": {
+        "Car": {
+          "annotated_frames": 198,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 198,
+          "plate_predictions": 454,
+          "matched_detections": 96,
+          "plate_recall": 0.48484848484848486,
+          "plate_precision": 0.21145374449339208,
+          "ocr_labelled_plates": 198,
+          "ocr_labelled_matches": 96,
+          "ocr_exact_matches": 0,
+          "ocr_exact_match": 0.0,
+          "ocr_end_to_end_exact_match": 0.0,
+          "character_error_rate": 0.871875,
+          "end_to_end_character_error_rate": 0.9378787878787879,
+          "evaluated_confident_reads": 0,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": null,
+          "unmatched_confident_reads": 0,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 0.0,
+          "track_level_evaluable_count": 8,
+          "track_level_character_error_rate": 0.8125,
+          "track_false_confident_read_rate": null,
+          "matched_plate_track_id_switches": 1,
+          "extra_predicted_ids_per_reference_total": 1,
+          "correct_stable_read_latency_ms": {
+            "count": 0,
+            "median": null,
+            "p95": null
+          },
+          "unreadable_rate": 0.32158590308370044,
+          "missing_candidate_rate": 0.552863436123348,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        },
+        "Van": {
+          "annotated_frames": 17,
+          "ground_truth_vehicles": 0,
+          "vehicle_recall": null,
+          "ground_truth_plates": 17,
+          "plate_predictions": 30,
+          "matched_detections": 14,
+          "plate_recall": 0.8235294117647058,
+          "plate_precision": 0.4666666666666667,
+          "ocr_labelled_plates": 17,
+          "ocr_labelled_matches": 14,
+          "ocr_exact_matches": 0,
+          "ocr_exact_match": 0.0,
+          "ocr_end_to_end_exact_match": 0.0,
+          "character_error_rate": 0.8,
+          "end_to_end_character_error_rate": 0.8352941176470589,
+          "evaluated_confident_reads": 0,
+          "false_confident_reads": 0,
+          "false_confident_read_rate": null,
+          "unmatched_confident_reads": 0,
+          "association_labelled_matches": 0,
+          "association_legacy_id_matches": 0,
+          "association_accuracy": null,
+          "track_level_exact_match": 0.0,
+          "track_level_evaluable_count": 1,
+          "track_level_character_error_rate": 0.8,
+          "track_false_confident_read_rate": null,
+          "matched_plate_track_id_switches": 0,
+          "extra_predicted_ids_per_reference_total": 0,
+          "correct_stable_read_latency_ms": {
+            "count": 0,
+            "median": null,
+            "p95": null
+          },
+          "unreadable_rate": 0.1,
+          "missing_candidate_rate": 0.23333333333333334,
+          "mean_frame_latency_ms": null,
+          "estimated_pipeline_fps": null,
+          "iou_threshold": 0.5
+        }
+      }
+    },
+    "paired_720p_candidate_ocr": {
+      "reference_frames": 215,
+      "reference_chars": 2150,
+      "paired_matched_frames": 116,
+      "by_reader": {
+        "cct": {
+          "frames": 116,
+          "exact": 28,
+          "edits": 206,
+          "chars": 1160,
+          "end_to_end_edits": 1196
+        },
+        "awiros": {
+          "frames": 116,
+          "exact": 104,
+          "edits": 16,
+          "chars": 1160,
+          "end_to_end_edits": 1006
+        }
+      },
+      "by_clip": {
+        "Bangalore_0/cct": {
+          "frames": 16,
+          "exact": 3,
+          "edits": 30,
+          "chars": 160
+        },
+        "Bangalore_0/awiros": {
+          "frames": 16,
+          "exact": 15,
+          "edits": 1,
+          "chars": 160
+        },
+        "Bangalore_1/cct": {
+          "frames": 23,
+          "exact": 5,
+          "edits": 51,
+          "chars": 230
+        },
+        "Bangalore_1/awiros": {
+          "frames": 23,
+          "exact": 23,
+          "edits": 0,
+          "chars": 230
+        },
+        "Bangalore_2/cct": {
+          "frames": 16,
+          "exact": 6,
+          "edits": 17,
+          "chars": 160
+        },
+        "Bangalore_2/awiros": {
+          "frames": 16,
+          "exact": 15,
+          "edits": 2,
+          "chars": 160
+        },
+        "Bangalore_3/cct": {
+          "frames": 16,
+          "exact": 6,
+          "edits": 19,
+          "chars": 160
+        },
+        "Bangalore_3/awiros": {
+          "frames": 16,
+          "exact": 15,
+          "edits": 1,
+          "chars": 160
+        },
+        "Mumbai_0/cct": {
+          "frames": 20,
+          "exact": 2,
+          "edits": 40,
+          "chars": 200
+        },
+        "Mumbai_0/awiros": {
+          "frames": 20,
+          "exact": 18,
+          "edits": 2,
+          "chars": 200
+        },
+        "Mumbai_1/cct": {
+          "frames": 5,
+          "exact": 0,
+          "edits": 6,
+          "chars": 50
+        },
+        "Mumbai_1/awiros": {
+          "frames": 5,
+          "exact": 4,
+          "edits": 2,
+          "chars": 50
+        },
+        "Mumbai_2/cct": {
+          "frames": 4,
+          "exact": 0,
+          "edits": 19,
+          "chars": 40
+        },
+        "Mumbai_2/awiros": {
+          "frames": 4,
+          "exact": 0,
+          "edits": 6,
+          "chars": 40
+        },
+        "Mumbai_3/cct": {
+          "frames": 8,
+          "exact": 6,
+          "edits": 2,
+          "chars": 80
+        },
+        "Mumbai_3/awiros": {
+          "frames": 8,
+          "exact": 6,
+          "edits": 2,
+          "chars": 80
+        },
+        "Mumbai_4/cct": {
+          "frames": 8,
+          "exact": 0,
+          "edits": 22,
+          "chars": 80
+        },
+        "Mumbai_4/awiros": {
+          "frames": 8,
+          "exact": 8,
+          "edits": 0,
+          "chars": 80
+        }
+      },
+      "paired_correct": {
+        "cct_False_awiros_True": 77,
+        "cct_True_awiros_True": 27,
+        "cct_False_awiros_False": 11,
+        "cct_True_awiros_False": 1
+      }
+    }
+  },
+  "temporal_recognition_stress": {
+    "modes": {
+      "first_frame": {
+        "cases": 13,
+        "exact": 6,
+        "chars": 114,
+        "edits": 27,
+        "reads": 4,
+        "incorrect_reads": 0
+      },
+      "best_quality_frame": {
+        "cases": 13,
+        "exact": 3,
+        "chars": 114,
+        "edits": 43,
+        "reads": 2,
+        "incorrect_reads": 0
+      },
+      "simple_majority": {
+        "cases": 13,
+        "exact": 6,
+        "chars": 114,
+        "edits": 25,
+        "reads": 0,
+        "incorrect_reads": 0
+      },
+      "quality_weighted_track": {
+        "cases": 13,
+        "exact": 6,
+        "chars": 114,
+        "edits": 23,
+        "reads": 2,
+        "incorrect_reads": 0
+      }
+    },
+    "conditions": {
+      "dim": {
+        "cases": 13,
+        "exact": 6,
+        "chars": 114,
+        "edits": 27,
+        "reads": 4,
+        "incorrect_reads": 0
+      },
+      "horizontal_motion_blur": {
+        "cases": 13,
+        "exact": 3,
+        "chars": 114,
+        "edits": 49,
+        "reads": 2,
+        "incorrect_reads": 0
+      },
+      "original": {
+        "cases": 13,
+        "exact": 6,
+        "chars": 114,
+        "edits": 23,
+        "reads": 2,
+        "incorrect_reads": 0
+      },
+      "glare": {
+        "cases": 13,
+        "exact": 2,
+        "chars": 114,
+        "edits": 46,
+        "reads": 1,
+        "incorrect_reads": 0
+      },
+      "small": {
+        "cases": 13,
+        "exact": 1,
+        "chars": 114,
+        "edits": 65,
+        "reads": 0,
+        "incorrect_reads": 0
+      },
+      "perspective": {
+        "cases": 13,
+        "exact": 5,
+        "chars": 114,
+        "edits": 33,
+        "reads": 3,
+        "incorrect_reads": 0
+      },
+      "slight_blur": {
+        "cases": 13,
+        "exact": 5,
+        "chars": 114,
+        "edits": 31,
+        "reads": 4,
+        "incorrect_reads": 0
+      },
+      "repeat": {
+        "cases": 13,
+        "exact": 6,
+        "chars": 114,
+        "edits": 23,
+        "reads": 2,
+        "incorrect_reads": 0
+      }
+    }
+  },
+  "unlabelled_integration_clips": {
+    "day": {
+      "status": "COMPLETE",
+      "decoded": 402,
+      "analyzed": 402,
+      "encoded": 402,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 10353,
+      "tracks": 309,
+      "frame_statuses": {
+        "UNASSOCIATED": 1659,
+        "LOW_CONFIDENCE": 1370,
+        "NO_PLATE_DETECTED": 5046,
+        "UNREADABLE": 2269,
+        "READ": 9
+      },
+      "track_statuses": {
+        "LOW_CONFIDENCE": 156,
+        "UNREADABLE": 153
+      },
+      "wall_seconds": 379.216,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 93.259,
+          "p95": 96.672
+        },
+        "tracking": {
+          "mean": 6.059,
+          "p95": 8.738
+        },
+        "plate_detection": {
+          "mean": 781.953,
+          "p95": 1227.226
+        },
+        "ocr": {
+          "mean": 30.165,
+          "p95": 44.274
+        },
+        "total": {
+          "mean": 918.305,
+          "p95": 1418.679
+        }
+      },
+      "torch_peak_mib": 780.0,
+      "device": "cuda:0"
+    },
+    "night": {
+      "status": "COMPLETE",
+      "decoded": 159,
+      "analyzed": 159,
+      "encoded": 159,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 2413,
+      "tracks": 106,
+      "frame_statuses": {
+        "LOW_CONFIDENCE": 93,
+        "UNREADABLE": 426,
+        "UNASSOCIATED": 236,
+        "NO_PLATE_DETECTED": 1658
+      },
+      "track_statuses": {
+        "UNREADABLE": 83,
+        "LOW_CONFIDENCE": 23
+      },
+      "wall_seconds": 99.079,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 79.441,
+          "p95": 94.661
+        },
+        "tracking": {
+          "mean": 4.357,
+          "p95": 6.496
+        },
+        "plate_detection": {
+          "mean": 486.742,
+          "p95": 896.84
+        },
+        "ocr": {
+          "mean": 25.742,
+          "p95": 193.928
+        },
+        "total": {
+          "mean": 601.075,
+          "p95": 1123.577
+        }
+      },
+      "torch_peak_mib": 780.0,
+      "device": "cuda:1"
+    }
+  },
+  "operational_checks": {
+    "local_av1_full_pipeline": {
+      "status": "LIMIT_REACHED",
+      "decoded": 8,
+      "analyzed": 8,
+      "encoded": 8,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "2997/50",
+      "rows": 0,
+      "tracks": 0,
+      "frame_statuses": {},
+      "track_statuses": {},
+      "wall_seconds": 2.46,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 160.119,
+          "p95": 288.706
+        },
+        "tracking": {
+          "mean": 0.326,
+          "p95": 0.459
+        },
+        "plate_detection": {
+          "mean": 116.085,
+          "p95": 166.314
+        },
+        "ocr": {
+          "mean": 0.055,
+          "p95": 0.143
+        },
+        "total": {
+          "mean": 277.579,
+          "p95": 438.719
+        }
+      },
+      "torch_peak_mib": 427.7,
+      "device": "cuda:1"
+    },
+    "ffmpeg_av1_input_decoder": "ffmpeg_libdav1d",
+    "cpu_fallback": {
+      "requested_device": "cuda:99",
+      "effective_device": "cpu",
+      "real_inference": true
+    },
+    "browser": {
+      "mixed_batch_and_filter_download": true,
+      "recorded_video_and_tracks": true,
+      "active_cancellation": true
+    },
+    "compose": {
+      "cpu_configuration": true,
+      "gpu_configuration": true,
+      "docker_build": "daemon socket permission denied"
+    },
+    "awiros_video_review": {
+      "decoded_frames": 12,
+      "track_summaries": 17,
+      "tracks_with_awiros_candidate": 4,
+      "tracks_with_repeated_awiros_candidate": 1,
+      "frame_observations_with_awiros_candidate": 34,
+      "accuracy_benchmark": false
+    },
+    "gpu_regression_tests_passed": 32
+  },
+  "frozen_reproduction": {
+    "detector_882_images": {
+      "model": "rtdetr-v2-r50",
+      "device": "cuda:1",
+      "test_images": 882,
+      "ground_truth_boxes": 902,
+      "ap": 0.7202924773767442,
+      "ap50": 0.988112577730703,
+      "ap75": 0.8734218674915146,
+      "ap_small": 0.582740734756877,
+      "score_floor": 0.001,
+      "wall_ms_per_image": 36.3582133604826,
+      "at_0_25": {
+        "matched": 886,
+        "predictions": 901,
+        "precision": 0.9833518312985572,
+        "recall": 0.9822616407982262
+      }
+    },
+    "coco_replay": {
+      "images": 5000,
+      "all_class_ap": 0.5637051308126265,
+      "all_class_ap50": 0.7487777919350517,
+      "four_class_ap": 0.6093823882476717,
+      "category_ids": [
+        3,
+        4,
+        6,
+        8
+      ],
+      "classes": {
+        "car": {
+          "ap": 0.5537900198140964,
+          "ap50": 0.8052078424134342,
+          "ap_small": 0.4274284470670286,
+          "ar100": 0.6702294056308655,
+          "reference": 1918,
+          "score_cutoffs_iou50": {
+            "0.15": {
+              "predictions": 4756,
+              "matched": 1718,
+              "precision": 0.36122792262405384,
+              "recall": 0.8957247132429614
+            },
+            "0.25": {
+              "predictions": 2709,
+              "matched": 1587,
+              "precision": 0.5858250276854928,
+              "recall": 0.8274244004171012
+            },
+            "0.35": {
+              "predictions": 1936,
+              "matched": 1446,
+              "precision": 0.746900826446281,
+              "recall": 0.7539103232533889
+            },
+            "0.5": {
+              "predictions": 1394,
+              "matched": 1240,
+              "precision": 0.8895265423242468,
+              "recall": 0.6465067778936392
+            }
+          }
+        },
+        "motorcycle": {
+          "ap": 0.5663881582374135,
+          "ap50": 0.8079072669972853,
+          "ap_small": 0.34171764627873696,
+          "ar100": 0.7029972752043597,
+          "reference": 367,
+          "score_cutoffs_iou50": {
+            "0.15": {
+              "predictions": 925,
+              "matched": 330,
+              "precision": 0.3567567567567568,
+              "recall": 0.8991825613079019
+            },
+            "0.25": {
+              "predictions": 494,
+              "matched": 297,
+              "precision": 0.6012145748987854,
+              "recall": 0.8092643051771117
+            },
+            "0.35": {
+              "predictions": 347,
+              "matched": 270,
+              "precision": 0.7780979827089337,
+              "recall": 0.7356948228882834
+            },
+            "0.5": {
+              "predictions": 250,
+              "matched": 226,
+              "precision": 0.904,
+              "recall": 0.6158038147138964
+            }
+          }
+        },
+        "bus": {
+          "ap": 0.7818749126054775,
+          "ap50": 0.909834325266456,
+          "ap_small": 0.4389552211380489,
+          "ar100": 0.8508833922261484,
+          "reference": 283,
+          "score_cutoffs_iou50": {
+            "0.15": {
+              "predictions": 545,
+              "matched": 264,
+              "precision": 0.48440366972477067,
+              "recall": 0.9328621908127208
+            },
+            "0.25": {
+              "predictions": 321,
+              "matched": 252,
+              "precision": 0.7850467289719626,
+              "recall": 0.8904593639575972
+            },
+            "0.35": {
+              "predictions": 273,
+              "matched": 242,
+              "precision": 0.8864468864468864,
+              "recall": 0.8551236749116607
+            },
+            "0.5": {
+              "predictions": 239,
+              "matched": 224,
+              "precision": 0.9372384937238494,
+              "recall": 0.7915194346289752
+            }
+          }
+        },
+        "truck": {
+          "ap": 0.5354764623336992,
+          "ap50": 0.6978500297080086,
+          "ap_small": 0.3111133091869677,
+          "ar100": 0.7949275362318841,
+          "reference": 414,
+          "score_cutoffs_iou50": {
+            "0.15": {
+              "predictions": 1795,
+              "matched": 374,
+              "precision": 0.20835654596100278,
+              "recall": 0.9033816425120773
+            },
+            "0.25": {
+              "predictions": 813,
+              "matched": 330,
+              "precision": 0.4059040590405904,
+              "recall": 0.7971014492753623
+            },
+            "0.35": {
+              "predictions": 426,
+              "matched": 271,
+              "precision": 0.636150234741784,
+              "recall": 0.6545893719806763
+            },
+            "0.5": {
+              "predictions": 240,
+              "matched": 201,
+              "precision": 0.8375,
+              "recall": 0.4855072463768116
+            }
+          }
+        }
+      },
+      "workers": [
+        {
+          "device": "cuda:0",
+          "wall_s": 110.91274472977966
+        },
+        {
+          "device": "cuda:1",
+          "wall_s": 89.17357434192672
+        }
+      ]
+    },
+    "same_default_still_image_aggregate_after_changes": true
+  }
+}

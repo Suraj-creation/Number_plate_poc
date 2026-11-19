@@ -8,6 +8,7 @@ import numpy as np
 import torch
 
 from src.utils.config import ROOT
+from src.utils.device import CudaUnavailable
 from src.utils.onnx_runtime import make_session_options, prepare_onnx_runtime
 
 log = logging.getLogger(__name__)
@@ -49,7 +50,7 @@ class PlateDetector:
                 providers[0] = ("CUDAExecutionProvider", {"device_id": int(device.partition(":")[2] or 0)})
             self.model = create_detector("yolo-v9-s-608-license-plate-end2end", conf_thresh=threshold, providers=providers, sess_options=make_session_options())
             if device.startswith("cuda") and "CUDAExecutionProvider" not in self.model.model.get_providers():
-                raise RuntimeError("YOLOv9 plate model did not activate ONNX CUDAExecutionProvider; refusing silent CPU fallback.")
+                raise CudaUnavailable("YOLOv9 plate model did not activate ONNX CUDAExecutionProvider.")
         else:
             raise ValueError(f"Unknown plate model: {model_name}")
         log.info("Loaded plate detector %s on %s", model_name, device)

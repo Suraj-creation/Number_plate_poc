@@ -24,15 +24,21 @@ COLUMNS = ["Source", "Frame", "Vehicle", "Track", "Plate candidate", "Status", "
 TRACK_COLUMNS = ["Track", "Vehicle", "Final candidate", "Status", "Support", "Frames", "Best frame"]
 
 
+def _ui_run_base() -> Path:
+    return (Path(os.getenv("ANPR_OUTPUT_DIR", ROOT / "output")) / "ui_runs").resolve()
+
+
 def _new_run_dir() -> Path:
-    base = Path(os.getenv("ANPR_OUTPUT_DIR", ROOT / "output")) / "ui_runs"
+    base = _ui_run_base()
     base.mkdir(parents=True, exist_ok=True, mode=0o700)
     return Path(mkdtemp(prefix="run-", dir=base))
 
 
 def _settings(profile, device, ocr_engine, save_crops, paddle, stride, vehicle_threshold, plate_threshold, ocr_threshold):
     cfg = apply_profile(load_config(), profile)
-    cfg.update(device=device, ocr_engine=ocr_engine, save_plate_crops=save_crops, paddle_ocr_fallback=paddle,
+    review = ocr_engine == "cct-awiros-review"
+    cfg.update(device=device, ocr_engine="fast-plate-ocr" if review else ocr_engine, awiros_review=review,
+               save_plate_crops=save_crops, paddle_ocr_fallback=paddle,
                video_frame_stride=int(stride), vehicle_threshold=vehicle_threshold, plate_threshold=plate_threshold,
                ocr_read_threshold=ocr_threshold)
     return validate_config(cfg)
@@ -89,11 +95,17 @@ def _empty_state():
     return {"rows": [], "tracks": [], "counts": {}, "total": 0}
 
 
+def _loopback(bind):
+    return bind in {"127.0.0.1", "::1", "localhost"}
+
+
 def _process(kind, media, duration, detector, profile, device, ocr_engine, save_crops, paddle,
              stride, vehicle_threshold, plate_threshold, ocr_threshold, progress, request):
     empty = [] if kind == "images" else None
     if not media:
         return empty, _empty_state(), None, None, None, "Choose input media to start."
+    if kind == "live" and not _loopback(os.getenv("ANPR_UI_BIND", "127.0.0.1")):
+        return empty, _empty_state(), None, None, None, "Server-side camera capture is available on the workstation UI."
     if kind == "live" and not (str(media).isdecimal() or str(media).lower().startswith(("rtsp://", "rtsps://"))):
         return empty, _empty_state(), None, None, None, "Enter a webcam device index or an RTSP URL."
     session = request.session_hash
@@ -113,12 +125,14 @@ def _process(kind, media, duration, detector, profile, device, ocr_engine, save_
         result = run_video_cli(str(media), directory, cfg, detector, progress=progress,
                                max_duration_s=duration if kind == "live" else None, cancelled=event.is_set)
         info = result["metadata"]
-        status = {"COMPLETE": "Complete", "CANCELLED": "Cancelled", "PARTIAL_DECODE": "Partial decode",
+        status = {"COMPLETE": "Complete", "CANCELLED": "Cancelled", "PARTIAL_DECODE": "Partial decode", "RESOURCE_LIMIT": "Output storage limit reached",
                   "LIMIT_REACHED": "Requested frame or duration limit reached"}[info["status"]]
         summary = (f"**{status}** · {info['decoded_frames']:,} decoded · {info['inferred_frames']:,} analyzed"
                    f" · {len(result['tracks']):,} vehicle tracks")
         for warning in info.get("warnings", []):
             summary += "\n\n" + escape(warning)
+        if info.get("device_fallback"):
+            summary += "\n\nCUDA startup failed. This run used the configured CPU fallback."
         state = {"rows": result["observations"], "tracks": result["tracks"],
                  "counts": info.get("status_counts", {}), "total": info.get("observations", 0)}
         return result["annotated"], state, result["json"], result["csv"], result["zip"], summary
@@ -189,6 +203,7 @@ def _inspect(state, status, query, event: gr.SelectData):
         "plate_detector_below_read_gate": "Weak plate detection",
         "independent_ocr_disagrees": "The second reader disagrees",
         "primary_ocr_below_read_gate": "Primary OCR fell below the frame read gate",
+        "primary_character_scores_unavailable": "Primary reader provided no character-level scores",
         "ambiguous": "More than one vehicle contains the plate",
         "multiple_plates": "More than one plate candidate matches the vehicle",
         "no_containing_vehicle": "No detected vehicle contains the plate",
@@ -218,8 +233,15 @@ def _inspect_track(state, event: gr.SelectData):
     track = state["tracks"][index]
     text = track["consensus"] or "No candidate"
     frames = ", ".join(map(str, track["evidence_frame_indices"])) or "none"
+    first, last, stable = (track.get(key) for key in ("first_seen_ms", "last_seen_ms", "stable_read_ms"))
+    timing = f"\n\nObserved {first / 1000:.2f}–{last / 1000:.2f} s." if first is not None and last is not None else ""
+    if stable is not None:
+        timing += f" Stable READ at {stable / 1000:.2f} s."
+    if track.get("review_ocr_consensus"):
+        timing += (f"\n\nAwiros review candidate **{escape(track['review_ocr_consensus'])}**"
+                   f" from {track['review_ocr_support']} distinct observations.")
     return (f"**{escape(text)}** · {track['recognition_status']} · Track {track['vehicle_track_id']}\n\n"
-            f"Supporting frame indices: {frames}. Candidate weight share {track['consensus_fraction']:.0%}.", track)
+            f"Supporting frame indices: {frames}. Candidate weight share {track['consensus_fraction']:.0%}.{timing}", track)
 
 
 def _diagnostics():
@@ -334,7 +356,9 @@ def build_ui():
                 detector = gr.Dropdown([("RT-DETRv2 R50", "rtdetr-v2-r50"), ("YOLOv9-S 608 · evaluation only", "yolo-v9-s-608")],
                                        value=cfg["plate_model"], label="Plate detector", min_width=220)
                 device = gr.Dropdown(devices, value=selected, label="Device", min_width=170)
-                ocr = gr.Dropdown([("CCT-S v2 Global", "fast-plate-ocr"), ("Indian TrOCR · non-commercial research", "indian-trocr")],
+                ocr = gr.Dropdown([("CCT-S v2 Global", "fast-plate-ocr"), ("Awiros · experimental candidates", "awiros"),
+                                   ("CCT-S + Awiros suggestions for review", "cct-awiros-review"),
+                                   ("Indian TrOCR · non-commercial research", "indian-trocr")],
                                   value=cfg["ocr_engine"], label="OCR engine", min_width=225)
             with gr.Row():
                 vehicle_threshold = gr.Slider(0.05, 0.9, cfg["vehicle_threshold"], step=0.05, label="Vehicle threshold", min_width=170)
@@ -350,8 +374,9 @@ def build_ui():
                 _workflow("images", settings)
             with gr.Tab("Recorded video"):
                 _workflow("video", settings)
-            with gr.Tab("Webcam / RTSP"):
-                _workflow("live", settings)
+            if _loopback(os.getenv("ANPR_UI_BIND", "127.0.0.1")):
+                with gr.Tab("Webcam / RTSP"):
+                    _workflow("live", settings)
         with gr.Accordion("Diagnostics", open=False):
             gr.Button("Check GPU and model cache").click(_diagnostics, outputs=gr.JSON(label="Runtime status"),
                                                          api_visibility="private")
@@ -362,8 +387,19 @@ def build_ui():
 def launch():
     css = Path(__file__).with_name("app.css").read_text(encoding="utf-8")
     theme = gr.themes.Soft(primary_hue="teal", neutral_hue="slate", font=["system-ui", "sans-serif"])
+    bind = os.getenv("ANPR_UI_BIND", "127.0.0.1")
+    auth = None
+    if not _loopback(bind):
+        secret = os.getenv("ANPR_UI_PASSWORD_FILE")
+        if not secret:
+            raise ValueError("Set ANPR_UI_PASSWORD_FILE to enable a network bind.")
+        password = Path(secret).read_text(encoding="utf-8").strip()
+        if len(password) < 16:
+            raise ValueError("The network UI password must contain at least 16 characters.")
+        auth = (os.getenv("ANPR_UI_USERNAME", "operator"), password)
     build_ui().queue(default_concurrency_limit=1, max_size=8).launch(
-        server_name="127.0.0.1", share=False, theme=theme, css=css, max_file_size="2gb")
+        server_name=bind, share=False, theme=theme, css=css, max_file_size="2gb", auth=auth,
+        allowed_paths=[str(_ui_run_base())], enable_monitoring=False)
 
 
 if __name__ == "__main__":
