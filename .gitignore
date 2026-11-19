@@ -3,6 +3,7 @@
 models/huggingface/
 models/torch/
 models/cache/
+models/fast-plate-ocr/
 models/**/*.pth
 models/**/*.onnx
 input/*
