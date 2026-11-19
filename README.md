@@ -46,7 +46,7 @@ python -m src.cli stream --source 0 --max-duration 30 --output output/capture
 python -m src.cli baseline --input input/images/traffic.jpg --output output/baseline
 ```
 
-Use `--config path.yaml` to apply partial overrides of `configs/default.yaml`. Explicit `--plate-model`, `--profile`, or `--stride` options override the corresponding settings. Press Ctrl+C during CLI video to finalize the processed prefix and return exit code 130. An early decode failure after valid frames returns a partial export and exit code 1. Batches keep successful files and return exit code 1 when any image fails decoding. Use a separate output directory for each CLI run to preserve earlier downloads.
+Use `--config path.yaml` to apply partial overrides of `configs/default.yaml`. Explicit `--plate-model`, `--profile`, or `--stride` options override the corresponding settings. Press Ctrl+C during CLI video to finalize the processed prefix and return exit code 130. An early decode failure after valid frames returns a partial export and exit code 1. Batches keep successful files and return exit code 1 when any image fails decoding. Use a separate output directory for each CLI run to preserve earlier downloads. The tracker proposal cutoff defaults to 0.35 after a two-group KITTI evaluation. Set `vehicle_tracking_proposal_threshold: 0.15` in an override to reproduce the v0.2.0 tracking settings.
 
 ## Optional PaddleOCR second opinion
 

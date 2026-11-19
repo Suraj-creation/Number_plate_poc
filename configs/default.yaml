@@ -41,8 +41,9 @@ video_decode_limit: 180000
 max_frame_pixels: 16777216
 max_batch_images: 100
 ui_preview_rows: 2000
-# Low detector scores may extend an existing track. They cannot create visible standalone detections.
-vehicle_tracking_proposal_threshold: 0.15
+# Match the vehicle display cutoff by default. Lower values let weaker proposals extend tracks.
+# A 0.35 cutoff beat 0.15 on two disjoint KITTI car sequence groups.
+vehicle_tracking_proposal_threshold: 0.35
 track_min_class_fraction: 0.75
 # RT-DETR plate crops share a forward pass. Use 1 on memory-constrained GPUs.
 plate_inference_batch_size: 4

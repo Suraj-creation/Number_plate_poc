@@ -1,0 +1,906 @@
+{
+  "coco": {
+    "images": 5000,
+    "all_class_ap": 0.5637051308126265,
+    "all_class_ap50": 0.7487777919350517,
+    "four_class_ap": 0.6093823882476717,
+    "category_ids": [
+      3,
+      4,
+      6,
+      8
+    ],
+    "classes": {
+      "car": {
+        "ap": 0.5537900198140964,
+        "ap50": 0.8052078424134342,
+        "ap_small": 0.4274284470670286,
+        "ar100": 0.6702294056308655,
+        "reference": 1918,
+        "score_cutoffs_iou50": {
+          "0.15": {
+            "predictions": 4756,
+            "matched": 1718,
+            "precision": 0.36122792262405384,
+            "recall": 0.8957247132429614
+          },
+          "0.25": {
+            "predictions": 2709,
+            "matched": 1587,
+            "precision": 0.5858250276854928,
+            "recall": 0.8274244004171012
+          },
+          "0.35": {
+            "predictions": 1936,
+            "matched": 1446,
+            "precision": 0.746900826446281,
+            "recall": 0.7539103232533889
+          },
+          "0.5": {
+            "predictions": 1394,
+            "matched": 1240,
+            "precision": 0.8895265423242468,
+            "recall": 0.6465067778936392
+          }
+        }
+      },
+      "motorcycle": {
+        "ap": 0.5663881582374135,
+        "ap50": 0.8079072669972853,
+        "ap_small": 0.34171764627873696,
+        "ar100": 0.7029972752043597,
+        "reference": 367,
+        "score_cutoffs_iou50": {
+          "0.15": {
+            "predictions": 925,
+            "matched": 330,
+            "precision": 0.3567567567567568,
+            "recall": 0.8991825613079019
+          },
+          "0.25": {
+            "predictions": 494,
+            "matched": 297,
+            "precision": 0.6012145748987854,
+            "recall": 0.8092643051771117
+          },
+          "0.35": {
+            "predictions": 347,
+            "matched": 270,
+            "precision": 0.7780979827089337,
+            "recall": 0.7356948228882834
+          },
+          "0.5": {
+            "predictions": 250,
+            "matched": 226,
+            "precision": 0.904,
+            "recall": 0.6158038147138964
+          }
+        }
+      },
+      "bus": {
+        "ap": 0.7818749126054775,
+        "ap50": 0.909834325266456,
+        "ap_small": 0.4389552211380489,
+        "ar100": 0.8508833922261484,
+        "reference": 283,
+        "score_cutoffs_iou50": {
+          "0.15": {
+            "predictions": 545,
+            "matched": 264,
+            "precision": 0.48440366972477067,
+            "recall": 0.9328621908127208
+          },
+          "0.25": {
+            "predictions": 321,
+            "matched": 252,
+            "precision": 0.7850467289719626,
+            "recall": 0.8904593639575972
+          },
+          "0.35": {
+            "predictions": 273,
+            "matched": 242,
+            "precision": 0.8864468864468864,
+            "recall": 0.8551236749116607
+          },
+          "0.5": {
+            "predictions": 239,
+            "matched": 224,
+            "precision": 0.9372384937238494,
+            "recall": 0.7915194346289752
+          }
+        }
+      },
+      "truck": {
+        "ap": 0.5354764623336992,
+        "ap50": 0.6978500297080086,
+        "ap_small": 0.3111133091869677,
+        "ar100": 0.7949275362318841,
+        "reference": 414,
+        "score_cutoffs_iou50": {
+          "0.15": {
+            "predictions": 1795,
+            "matched": 374,
+            "precision": 0.20835654596100278,
+            "recall": 0.9033816425120773
+          },
+          "0.25": {
+            "predictions": 813,
+            "matched": 330,
+            "precision": 0.4059040590405904,
+            "recall": 0.7971014492753623
+          },
+          "0.35": {
+            "predictions": 426,
+            "matched": 271,
+            "precision": 0.636150234741784,
+            "recall": 0.6545893719806763
+          },
+          "0.5": {
+            "predictions": 240,
+            "matched": 201,
+            "precision": 0.8375,
+            "recall": 0.4855072463768116
+          }
+        }
+      }
+    },
+    "workers": [
+      {
+        "device": "cuda:0",
+        "wall_s": 110.91274472977966
+      },
+      {
+        "device": "cuda:1",
+        "wall_s": 89.17357434192672
+      }
+    ]
+  },
+  "kitti": {
+    "First group": {
+      "sequences": [
+        "0000",
+        "0003",
+        "0017"
+      ],
+      "frames": 443,
+      "profiles": {
+        "standard": {
+          "HOTA": 59.786,
+          "DetA": 59.369,
+          "AssA": 60.89,
+          "DetRe": 68.239,
+          "DetPr": 73.313,
+          "AssRe": 65.87,
+          "AssPr": 81.898,
+          "LocA": 82.875,
+          "OWTA": 64.339,
+          "HOTA(0)": 75.772,
+          "LocA(0)": 77.804,
+          "HOTALocA(0)": 58.953,
+          "MOTA": 66.12,
+          "MOTP": 80.373,
+          "MODA": 69.399,
+          "CLR_Re": 81.239,
+          "CLR_Pr": 87.28,
+          "MTR": 52.941,
+          "PTR": 47.059,
+          "MLR": 0.0,
+          "CLR_TP": 446.0,
+          "CLR_FN": 103.0,
+          "CLR_FP": 65.0,
+          "IDSW": 18.0,
+          "MT": 9.0,
+          "PT": 8.0,
+          "ML": 0.0,
+          "Frag": 28.0,
+          "sMOTA": 50.176,
+          "IDF1": 73.019,
+          "IDR": 70.492,
+          "IDP": 75.734,
+          "IDTP": 387.0,
+          "IDFN": 162.0,
+          "IDFP": 124.0,
+          "Dets": 511.0,
+          "GT_Dets": 549.0,
+          "IDs": 32.0,
+          "GT_IDs": 17.0
+        },
+        "high_scores_only": {
+          "HOTA": 64.429,
+          "DetA": 66.612,
+          "AssA": 62.912,
+          "DetRe": 75.832,
+          "DetPr": 75.694,
+          "AssRe": 67.756,
+          "AssPr": 82.536,
+          "LocA": 83.357,
+          "OWTA": 68.989,
+          "HOTA(0)": 81.218,
+          "LocA(0)": 78.709,
+          "HOTALocA(0)": 63.926,
+          "MOTA": 77.231,
+          "MOTP": 80.906,
+          "MODA": 79.781,
+          "CLR_Re": 89.982,
+          "CLR_Pr": 89.818,
+          "MTR": 76.471,
+          "PTR": 23.529,
+          "MLR": 0.0,
+          "CLR_TP": 494.0,
+          "CLR_FN": 55.0,
+          "CLR_FP": 56.0,
+          "IDSW": 14.0,
+          "MT": 13.0,
+          "PT": 4.0,
+          "ML": 0.0,
+          "Frag": 8.0,
+          "sMOTA": 60.05,
+          "IDF1": 76.251,
+          "IDR": 76.321,
+          "IDP": 76.182,
+          "IDTP": 419.0,
+          "IDFN": 130.0,
+          "IDFP": 131.0,
+          "Dets": 550.0,
+          "GT_Dets": 549.0,
+          "IDs": 30.0,
+          "GT_IDs": 17.0
+        }
+      }
+    },
+    "Holdout": {
+      "sequences": [
+        "0002",
+        "0005",
+        "0010"
+      ],
+      "frames": 824,
+      "profiles": {
+        "standard": {
+          "HOTA": 55.278,
+          "DetA": 60.866,
+          "AssA": 50.658,
+          "DetRe": 63.687,
+          "DetPr": 84.031,
+          "AssRe": 53.322,
+          "AssPr": 83.472,
+          "LocA": 85.358,
+          "OWTA": 56.679,
+          "HOTA(0)": 66.059,
+          "LocA(0)": 82.962,
+          "HOTALocA(0)": 54.804,
+          "MOTA": 70.115,
+          "MOTP": 83.053,
+          "MODA": 74.282,
+          "CLR_Re": 75.036,
+          "CLR_Pr": 99.005,
+          "MTR": 42.623,
+          "PTR": 54.098,
+          "MLR": 3.2787,
+          "CLR_TP": 2089.0,
+          "CLR_FN": 695.0,
+          "CLR_FP": 21.0,
+          "IDSW": 116.0,
+          "MT": 26.0,
+          "PT": 33.0,
+          "ML": 2.0,
+          "Frag": 221.0,
+          "sMOTA": 57.399,
+          "IDF1": 70.985,
+          "IDR": 62.392,
+          "IDP": 82.322,
+          "IDTP": 1737.0,
+          "IDFN": 1047.0,
+          "IDFP": 373.0,
+          "Dets": 2110.0,
+          "GT_Dets": 2784.0,
+          "IDs": 84.0,
+          "GT_IDs": 61.0
+        },
+        "high_scores_only": {
+          "HOTA": 66.572,
+          "DetA": 68.903,
+          "AssA": 64.723,
+          "DetRe": 72.194,
+          "DetPr": 84.877,
+          "AssRe": 67.699,
+          "AssPr": 86.81,
+          "LocA": 85.816,
+          "OWTA": 68.278,
+          "HOTA(0)": 79.249,
+          "LocA(0)": 83.616,
+          "HOTALocA(0)": 66.265,
+          "MOTA": 81.825,
+          "MOTP": 83.678,
+          "MODA": 83.764,
+          "CLR_Re": 84.411,
+          "CLR_Pr": 99.24,
+          "MTR": 72.131,
+          "PTR": 24.59,
+          "MLR": 3.2787,
+          "CLR_TP": 2350.0,
+          "CLR_FN": 434.0,
+          "CLR_FP": 18.0,
+          "IDSW": 54.0,
+          "MT": 44.0,
+          "PT": 15.0,
+          "ML": 2.0,
+          "Frag": 73.0,
+          "sMOTA": 68.047,
+          "IDF1": 80.008,
+          "IDR": 74.03,
+          "IDP": 87.035,
+          "IDTP": 2061.0,
+          "IDFN": 723.0,
+          "IDFP": 307.0,
+          "Dets": 2368.0,
+          "GT_Dets": 2784.0,
+          "IDs": 86.0,
+          "GT_IDs": 61.0
+        }
+      }
+    }
+  },
+  "plate_rows": [
+    {
+      "annotated_frames": 47,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 52,
+      "plate_predictions": 76,
+      "matched_detections": 47,
+      "plate_recall": 0.9038461538461539,
+      "plate_precision": 0.618421052631579,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 8,
+      "ocr_exact_match": 0.34782608695652173,
+      "ocr_end_to_end_exact_match": 0.32,
+      "character_error_rate": 0.215962441314554,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 5,
+      "false_confident_reads": 1,
+      "false_confident_read_rate": 0.2,
+      "unmatched_confident_reads": 1,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.13157894736842105,
+      "missing_candidate_rate": 0.13157894736842105,
+      "mean_frame_latency_ms": 648.43,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 11,
+        "LOW_CONFIDENCE": 48,
+        "UNASSOCIATED": 7,
+        "UNREADABLE": 10
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 46,
+          "matched_detections": 42,
+          "plate_recall": 0.9130434782608695,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 7
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": null,
+        "vehicle_crop": null,
+        "tile": null
+      },
+      "label": "Original RT + CCT"
+    },
+    {
+      "annotated_frames": 47,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 52,
+      "plate_predictions": 76,
+      "matched_detections": 47,
+      "plate_recall": 0.9038461538461539,
+      "plate_precision": 0.618421052631579,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 8,
+      "ocr_exact_match": 0.34782608695652173,
+      "ocr_end_to_end_exact_match": 0.32,
+      "character_error_rate": 0.215962441314554,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 4,
+      "false_confident_reads": 0,
+      "false_confident_read_rate": 0.0,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.10526315789473684,
+      "missing_candidate_rate": 0.13157894736842105,
+      "mean_frame_latency_ms": 582.6,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 7,
+        "LOW_CONFIDENCE": 36,
+        "UNASSOCIATED": 25,
+        "NO_PLATE_DETECTED": 39,
+        "UNREADABLE": 8
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 46,
+          "matched_detections": 42,
+          "plate_recall": 0.9130434782608695,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 7
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 45,
+        "vehicle_crop": 39,
+        "tile": 0
+      },
+      "label": "Standard RT + CCT"
+    },
+    {
+      "annotated_frames": 47,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 52,
+      "plate_predictions": 96,
+      "matched_detections": 49,
+      "plate_recall": 0.9423076923076923,
+      "plate_precision": 0.5104166666666666,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 23,
+      "ocr_exact_matches": 8,
+      "ocr_exact_match": 0.34782608695652173,
+      "ocr_end_to_end_exact_match": 0.32,
+      "character_error_rate": 0.215962441314554,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 4,
+      "false_confident_reads": 0,
+      "false_confident_read_rate": 0.0,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.17708333333333334,
+      "missing_candidate_rate": 0.23958333333333334,
+      "mean_frame_latency_ms": 635.85,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 7,
+        "LOW_CONFIDENCE": 41,
+        "UNASSOCIATED": 31,
+        "UNREADABLE": 17,
+        "NO_PLATE_DETECTED": 36
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 1
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 46,
+          "matched_detections": 44,
+          "plate_recall": 0.9565217391304348,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 18,
+          "ocr_exact_matches": 7
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 46,
+        "vehicle_crop": 40,
+        "tile": 0
+      },
+      "label": "RT at 0.15 + CCT"
+    },
+    {
+      "annotated_frames": 47,
+      "ground_truth_vehicles": 0,
+      "vehicle_recall": null,
+      "ground_truth_plates": 52,
+      "plate_predictions": 60,
+      "matched_detections": 48,
+      "plate_recall": 0.9230769230769231,
+      "plate_precision": 0.8,
+      "ocr_labelled_plates": 25,
+      "ocr_labelled_matches": 22,
+      "ocr_exact_matches": 10,
+      "ocr_exact_match": 0.45454545454545453,
+      "ocr_end_to_end_exact_match": 0.4,
+      "character_error_rate": 0.17733990147783252,
+      "end_to_end_character_error_rate": 0.27705627705627706,
+      "evaluated_confident_reads": 6,
+      "false_confident_reads": 1,
+      "false_confident_read_rate": 0.16666666666666666,
+      "unmatched_confident_reads": 0,
+      "association_labelled_matches": 0,
+      "association_legacy_id_matches": 0,
+      "association_accuracy": null,
+      "track_level_exact_match": null,
+      "track_level_evaluable_count": 0,
+      "track_false_confident_read_rate": null,
+      "matched_plate_track_id_switches": null,
+      "unreadable_rate": 0.03333333333333333,
+      "missing_candidate_rate": 0.03333333333333333,
+      "mean_frame_latency_ms": 386.01,
+      "estimated_pipeline_fps": null,
+      "iou_threshold": 0.5,
+      "statuses": {
+        "READ": 9,
+        "LOW_CONFIDENCE": 32,
+        "UNASSOCIATED": 17,
+        "NO_PLATE_DETECTED": 44,
+        "UNREADABLE": 2
+      },
+      "by_source_plate_width": {
+        "under_96_px": {
+          "ground_truth_plates": 4,
+          "matched_detections": 3,
+          "plate_recall": 0.75,
+          "ocr_labelled_plates": 4,
+          "ocr_labelled_matches": 3,
+          "ocr_exact_matches": 2
+        },
+        "96_to_159_px": {
+          "ground_truth_plates": 2,
+          "matched_detections": 2,
+          "plate_recall": 1.0,
+          "ocr_labelled_plates": 2,
+          "ocr_labelled_matches": 2,
+          "ocr_exact_matches": 0
+        },
+        "160_px_and_up": {
+          "ground_truth_plates": 46,
+          "matched_detections": 43,
+          "plate_recall": 0.9347826086956522,
+          "ocr_labelled_plates": 19,
+          "ocr_labelled_matches": 17,
+          "ocr_exact_matches": 8
+        }
+      },
+      "matched_by_detection_pass": {
+        "full_frame": 46,
+        "vehicle_crop": 39,
+        "tile": 0
+      },
+      "label": "YOLOv9 + CCT"
+    },
+    {
+      "label": "Standard RT + Awiros",
+      "matched_detections": 47,
+      "plate_predictions": 76,
+      "ocr_exact_matches": 12,
+      "end_to_end_character_error_rate": 0.21645021645021645
+    }
+  ],
+  "ocr": {
+    "publisher_original": {
+      "matched_crops": 25,
+      "all_text_labels": 25,
+      "results": {
+        "cct": {
+          "total": 25,
+          "exact": 9,
+          "edits": 52,
+          "reference_chars": 231,
+          "emitted": 25,
+          "wrong_emitted": 16
+        },
+        "awiros": {
+          "total": 25,
+          "exact": 13,
+          "edits": 32,
+          "reference_chars": 231,
+          "emitted": 25,
+          "wrong_emitted": 12
+        },
+        "paddle": {
+          "total": 25,
+          "exact": 13,
+          "edits": 54,
+          "reference_chars": 231,
+          "emitted": 25,
+          "wrong_emitted": 12
+        },
+        "trocr": {
+          "total": 25,
+          "exact": 7,
+          "edits": 114,
+          "reference_chars": 231,
+          "emitted": 16,
+          "wrong_emitted": 9
+        },
+        "awiros_paddle_agreement": {
+          "total": 25,
+          "exact": 6,
+          "edits": 175,
+          "reference_chars": 231,
+          "emitted": 6,
+          "wrong_emitted": 0
+        }
+      },
+      "paired_vs_cct": {}
+    },
+    "publisher_tight": {
+      "matched_crops": 25,
+      "all_text_labels": 25,
+      "results": {
+        "cct": {
+          "total": 25,
+          "exact": 8,
+          "edits": 55,
+          "reference_chars": 231,
+          "emitted": 25,
+          "wrong_emitted": 17
+        },
+        "awiros": {
+          "total": 25,
+          "exact": 11,
+          "edits": 36,
+          "reference_chars": 231,
+          "emitted": 25,
+          "wrong_emitted": 14
+        }
+      },
+      "paired_vs_cct": {}
+    },
+    "detected": {
+      "matched_crops": 23,
+      "all_text_labels": 25,
+      "results": {
+        "awiros": {
+          "total": 23,
+          "exact": 12,
+          "edits": 32,
+          "reference_chars": 213,
+          "emitted": 23,
+          "wrong_emitted": 11
+        },
+        "paddle": {
+          "total": 23,
+          "exact": 12,
+          "edits": 53,
+          "reference_chars": 213,
+          "emitted": 23,
+          "wrong_emitted": 11
+        },
+        "trocr": {
+          "total": 23,
+          "exact": 9,
+          "edits": 84,
+          "reference_chars": 213,
+          "emitted": 16,
+          "wrong_emitted": 7
+        },
+        "cct": {
+          "total": 23,
+          "exact": 8,
+          "edits": 46,
+          "reference_chars": 213,
+          "emitted": 23,
+          "wrong_emitted": 15
+        },
+        "awiros_paddle_agreement": {
+          "total": 23,
+          "exact": 4,
+          "edits": 177,
+          "reference_chars": 213,
+          "emitted": 4,
+          "wrong_emitted": 0
+        }
+      },
+      "paired_vs_cct": {
+        "awiros": {
+          "paired_wins": 9,
+          "paired_losses": 5
+        },
+        "paddle": {
+          "paired_wins": 8,
+          "paired_losses": 4
+        },
+        "trocr": {
+          "paired_wins": 7,
+          "paired_losses": 6
+        }
+      }
+    }
+  },
+  "provenance": {
+    "datacluster_revision": "2bb7cd4e46e58af4f6fa413ce8e205ac69e605a7",
+    "awiros_revision": "eadbc5ae4faa8284c8a547a60142fd555c3059ca",
+    "awiros_weights_sha256": "f9f1264e0c115a239ca6d6700a74ceffab17168b75dafc6c169c232012c68e47",
+    "paddleocr_source_revision": "fc82f229112a03aff46cc53db6166a98ea65a8fa",
+    "trackeval_revision": "12c8791b303e0a0b50f753af204249e622d0281a",
+    "comparison_release": "v0.2.0",
+    "device": "2 \u00d7 GTX 1080 Ti (RF-DETR, RT-DETRv2, YOLOv9, CCT, TrOCR). Paddle readers on CPU."
+  },
+  "awiros_paired_two_sided_p": 0.4239501953125,
+  "tracking_summary": "The cutoff of 0.35 improved every reported tracking metric in both groups. Against 0.15 on the holdout, it gained 11.29 HOTA points and reduced ID switches from 116 to 54. The local default is now 0.35. The published v0.2.0 tag retains 0.15.",
+  "ocr_summary": "Awiros improved end-to-end exact match from 8/25 to 12/25 and CER from 27.7% to 21.6%. On paired detections it fixed nine CCT errors and lost five CCT successes (exact paired p = 0.424). Awiros stays an experimental reader given the small sample and unknown training overlap.",
+  "plate_summary": "Lowering the RT plate threshold matched two more labels but added 20 boxes and preserved 8/25 exact reads. Standard stays at 0.25. Annotation-match precision was 61.8% with Standard and 80.0% with YOLO. YOLO remains evaluation-only.",
+  "publisher_plate_benchmark": {
+    "rt": {
+      "model": "rtdetr-v2-r50",
+      "device": "cuda:0",
+      "test_images": 882,
+      "ground_truth_boxes": 902,
+      "ap": 0.7202924773767442,
+      "ap50": 0.988112577730703,
+      "ap75": 0.8734218674915146,
+      "ap_small": 0.582740734756877,
+      "score_floor": 0.001,
+      "wall_ms_per_image": 38.912204199295296,
+      "at_0_25": {
+        "matched": 886,
+        "predictions": 901,
+        "precision": 0.9833518312985572,
+        "recall": 0.9822616407982262
+      }
+    },
+    "yolo": {
+      "model": "yolo-v9-s-608",
+      "device": "cuda:1",
+      "test_images": 882,
+      "ground_truth_boxes": 902,
+      "ap": 0.5608051070065311,
+      "ap50": 0.9677720673869076,
+      "ap75": 0.5911369751383263,
+      "ap_small": 0.4626147155266473,
+      "score_floor": 0.001,
+      "wall_ms_per_image": 26.65937640820366,
+      "at_0_25": {
+        "matched": 873,
+        "predictions": 907,
+        "precision": 0.9625137816979051,
+        "recall": 0.967849223946785
+      }
+    },
+    "dataset_revision": "b76dbba86154c33fa370bc3087fbc7c766845a66",
+    "parquet_sha256": "272089e7925cf134c03181171858bd37effc67a234a3adfbfb4b390a785f8f15",
+    "published_rt_ap": 0.97,
+    "published_rt_ap50": 0.97,
+    "rt_scalar_crosscheck": {
+      "model": "rtdetr-v2-r50",
+      "device": "cuda:1",
+      "test_images": 882,
+      "ground_truth_boxes": 902,
+      "ap": 0.72029392108505,
+      "ap50": 0.988112577730703,
+      "ap75": 0.8734219018048086,
+      "ap_small": 0.5827440866336022,
+      "score_floor": 0.001,
+      "wall_ms_per_image": 54.79852334477953,
+      "at_0_25": {
+        "matched": 886,
+        "predictions": 901,
+        "precision": 0.9833518312985572,
+        "recall": 0.9822616407982262
+      }
+    },
+    "rt_scalar_delta": {
+      "ap": 1.443708305792768e-06,
+      "ap50": 0.0,
+      "ap75": 3.431329398395633e-08,
+      "ap_small": 3.3518767251772275e-06
+    }
+  },
+  "same_split_line": "RT 72.03 / 98.81 and YOLO 56.08 / 96.78 AP50\u201395 / AP50",
+  "tracking_change_validation": {
+    "tests_passed": 24,
+    "night_video_integrity": {
+      "status": "COMPLETE",
+      "decoded": 159,
+      "analyzed": 159,
+      "encoded": 159,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": "3/1",
+      "rows": 2413,
+      "tracks": 106,
+      "frame_statuses": {
+        "LOW_CONFIDENCE": 93,
+        "UNREADABLE": 426,
+        "UNASSOCIATED": 236,
+        "NO_PLATE_DETECTED": 1658
+      },
+      "track_statuses": {
+        "UNREADABLE": 83,
+        "LOW_CONFIDENCE": 23
+      },
+      "wall_seconds": 99.151,
+      "timing": {
+        "vehicle_detection": {
+          "mean": 80.305,
+          "p95": 90.25
+        },
+        "tracking": {
+          "mean": 4.388,
+          "p95": 6.404
+        },
+        "plate_detection": {
+          "mean": 485.647,
+          "p95": 899.053
+        },
+        "ocr": {
+          "mean": 26.191,
+          "p95": 198.89
+        },
+        "total": {
+          "mean": 601.342,
+          "p95": 1111.314
+        }
+      },
+      "torch_peak_mib": 780.0,
+      "device": "cuda:1"
+    },
+    "trackeval_replay_identical": true
+  },
+  "video_validation": "The table shows published v0.2.0 runs. The updated tracker also passed all 24 tests and a new run on all 159 night frames. MP4, coordinate, CSV/JSON and ZIP checks passed. The clips have no labeled registrations or track IDs.",
+  "same_split_validation": "A second RT run using single-image inference on the other GPU reproduced both APs to two decimals. The reported strict-IoU AP did not reproduce."
+}
