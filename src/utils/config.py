@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
 PLATE_MODELS = ("rtdetr-v2-r50", "yolo-v9-s-608")
+VIDEO_OVERLAYS = ("full", "plates")
 OCR_MODELS = {"fast-plate-ocr": "cct-s-v2-global-model", "indian-trocr": "subash1652007/indian-plate-ocr",
               "awiros": "Awiros/anpr-ocr"}
 
@@ -41,6 +42,8 @@ def apply_profile(cfg: dict, profile: str) -> dict:
 
 
 def validate_config(cfg: dict) -> dict:
+    cfg.setdefault("video_overlay", "full")
+    cfg.setdefault("paddle_temporal_recovery", False)
     if not re.fullmatch(r"cpu|cuda(?::[0-9]+)?", str(cfg["device"])):
         raise ValueError("device must be cpu, cuda, or cuda:<index>.")
     if cfg["device"] == "cuda":
@@ -67,7 +70,8 @@ def validate_config(cfg: dict) -> dict:
             raise ValueError(f"{key} must be finite and non-negative.")
     if type(cfg["min_output_free_mib"]) is not int or cfg["min_output_free_mib"] < 0:
         raise ValueError("min_output_free_mib must be a non-negative integer.")
-    for key in ("save_plate_crops", "vehicle_tiles", "plate_tiles", "recovery_views", "paddle_ocr_fallback", "allow_cpu_fallback", "awiros_review"):
+    for key in ("save_plate_crops", "vehicle_tiles", "plate_tiles", "recovery_views", "paddle_ocr_fallback",
+                "paddle_temporal_recovery", "allow_cpu_fallback", "awiros_review"):
         if type(cfg[key]) is not bool:
             raise ValueError(f"{key} must be true or false.")
     if cfg["plate_inference_batch_size"] > 8:
@@ -76,10 +80,14 @@ def validate_config(cfg: dict) -> dict:
         raise ValueError("CPU inference and decoder threads must be 1 to 32.")
     if cfg["paddle_ocr_fallback"] and cfg["ocr_engine"] != "fast-plate-ocr":
         raise ValueError("PaddleOCR second opinion requires the CCT-S primary reader.")
+    if cfg["paddle_temporal_recovery"] and not cfg["paddle_ocr_fallback"]:
+        raise ValueError("PaddleOCR temporal recovery requires paddle_ocr_fallback.")
     if cfg["awiros_review"] and cfg["ocr_engine"] != "fast-plate-ocr":
         raise ValueError("Awiros review requires the CCT-S primary reader.")
     if cfg["write_video_fps"] != "source":
         raise ValueError("Only source FPS is supported for annotated output.")
+    if cfg["video_overlay"] not in VIDEO_OVERLAYS:
+        raise ValueError("video_overlay must be full or plates.")
     if cfg["track_history_size"] < cfg["minimum_consensus_observations"]:
         raise ValueError("track_history_size must cover minimum_consensus_observations.")
     return cfg

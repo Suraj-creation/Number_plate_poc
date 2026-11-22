@@ -24,3 +24,18 @@ These clips were downloaded for local pipeline QA on 2026-11-19. Pexels allows f
 | [Night market traffic in India](https://www.pexels.com/video/busy-urban-night-market-with-traffic-34793603/) | 18.30 s | 1920×1080, 60 fps |
 
 The 3 fps versions deliberately reduce the source temporal sampling for a practical multi-minute GPU integration run. Results do not establish performance at the original 25–60 fps, nor Indian plate accuracy.
+
+## Readable Mumbai street excerpt
+
+`mumbai_readable_plates.mp4` uses seconds 4–14 of a daylight street clip by aksinfo7 universe. The excerpt keeps the original 3840×2160 resolution and 30 fps. Audio is omitted. [Busy Urban Traffic on Mumbai Street](https://www.pexels.com/video/busy-urban-traffic-on-mumbai-street-30169858/) · [Pexels License](https://www.pexels.com/license/)
+
+```bash
+curl -fL https://www.pexels.com/download/video/30169858/ -o /tmp/mumbai_source.mp4
+ffmpeg -threads 4 -ss 4 -i /tmp/mumbai_source.mp4 -t 10 -map 0:v:0 \
+  -c:v libx264 -crf 15 -preset ultrafast -threads 4 -pix_fmt yuv420p -movflags +faststart \
+  input/videos/mumbai_readable_plates.mp4
+ANPR_OFFLINE=1 python -m src.cli video --input input/videos/mumbai_readable_plates.mp4 \
+  --config configs/readable_video.yaml --output output/readable_plates --stride 1
+```
+
+The configuration uses the optional PaddleOCR environment. Set `ANPR_PADDLE_PYTHON` to that environment's Python executable. The download used for the test had SHA-256 `e688aa982373e63c2dc88c1fe2ced4c3a1b9e4851a22075cf09c3e4adc671c0e`.

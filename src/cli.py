@@ -11,7 +11,7 @@ from pathlib import Path
 import cv2
 import yaml
 
-from src.utils.config import PLATE_MODELS, ROOT, apply_profile, configure_caches, load_config, validate_config
+from src.utils.config import PLATE_MODELS, ROOT, VIDEO_OVERLAYS, apply_profile, configure_caches, load_config, validate_config
 from src.utils.device import device_report
 from src.utils.logging import setup_logging
 
@@ -121,7 +121,7 @@ def run_video_cli(source: str, output_dir: Path, cfg: dict, plate_model: str, st
         pipe = make_pipeline(cfg, plate_model, video=True)
         resources.callback(pipe.close)
         pipe.crop_dir = output_dir / f"{stem}_crops" if cfg["save_plate_crops"] else None
-        info = dict(pipe.execution)
+        info = dict(pipe.execution, video_overlay=cfg["video_overlay"])
         spool = resources.enter_context(RowSpool(cfg["ui_preview_rows"], directory=output_dir))
         run_video(source, annotated, pipe, stride=stride, progress=progress, max_frames=max_frames,
                   max_duration_s=max_duration_s, row_sink=spool.add, cancelled=cancelled, run_info=info)
@@ -321,6 +321,8 @@ def main(argv=None):
         p.add_argument("--output", default=Path(os.getenv("ANPR_OUTPUT_DIR", ROOT / "output")), type=Path)
         p.add_argument("--plate-model", choices=PLATE_MODELS)
         p.add_argument("--stride", type=int)
+        p.add_argument("--overlay", choices=VIDEO_OVERLAYS,
+                       help="Show full diagnostics or only recognized plate numbers and their boxes")
         p.add_argument("--max-frames", type=int)
         p.add_argument("--max-duration", type=float, help="Maximum wall-clock processing time in seconds")
         p.add_argument("--config", type=Path)
@@ -355,6 +357,8 @@ def main(argv=None):
         import signal
         from threading import Event
 
+        if args.overlay:
+            cfg["video_overlay"] = args.overlay
         stop = Event()
         original = signal.signal(signal.SIGINT, lambda *_: stop.set())
         try:

@@ -41,12 +41,15 @@ The UI binds to loopback. Runs are stored under `output/ui_runs/` in separate di
 python -m src.cli image --input input/images/traffic.jpg --output output/still
 python -m src.cli images --input input/images --output output/batch
 python -m src.cli video --input input/videos/india_traffic_acceptance_2m14s_3fps.mp4 --output output/day
+python -m src.cli video --input input/videos/mumbai_readable_plates.mp4 --output output/readable_plates --overlay plates
 python -m src.cli video --input input/videos/india_night_traffic_validation_53s_3fps.mp4 --stride 2 --max-frames 45 --output output/night
 python -m src.cli stream --source 0 --max-duration 30 --output output/capture
 python -m src.cli baseline --input input/images/traffic.jpg --output output/baseline
 ```
 
 Use `--config path.yaml` to apply partial overrides of `configs/default.yaml`. Explicit `--plate-model`, `--profile`, or `--stride` options override the corresponding settings. Press Ctrl+C during CLI video to finalize the processed prefix and return exit code 130. An early decode failure after valid frames returns a partial export and exit code 1. Batches keep successful files and return exit code 1 when any image fails decoding. Use a separate output directory for each CLI run to preserve earlier downloads. The tracker proposal cutoff defaults to 0.35 after a two-group KITTI evaluation. Set `vehicle_tracking_proposal_threshold: 0.15` in an override to reproduce the v0.2.0 tracking settings.
+
+Use `--overlay plates` to show accepted plate numbers alongside their plate boxes. The JSON and CSV carry the complete detections, track IDs, scores, and OCR evidence. The default `--overlay full` includes diagnostic annotations. Use stride 1 for overlays on every video frame.
 
 ## Optional PaddleOCR second opinion
 
@@ -60,6 +63,8 @@ export ANPR_PADDLE_PYTHON="$PWD/.venv-paddle/bin/python"
 ```
 
 Enable **Use optional PaddleOCR second opinion** in the UI or set `paddle_ocr_fallback: true` in a CLI override. The assets must be present and match the configured hashes. See the [PaddleOCR project documentation](https://paddlepaddle.github.io/PaddleOCR/main/en/version3.x/algorithm/PP-OCRv5/PP-OCRv5.html).
+
+The [readable video configuration](configs/readable_video.yaml) enables plate-only overlays and PaddleOCR temporal recovery. A recovered number needs agreement from the primary reader or consistent evidence across a vehicle track. The per-frame export retains the original OCR string and identifies the reader that supplied the selected candidate. See the [source clip and preparation command](input/videos/README_sources.md#readable-mumbai-street-excerpt) and the [measured results](eval/readable_video_results.md).
 
 ## Test and evaluate
 

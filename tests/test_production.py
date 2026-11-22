@@ -4,9 +4,12 @@ import shutil
 import subprocess
 from pathlib import Path
 
+import numpy as np
+
 from eval.diagnostics import diagnose, edit_alignment
 from eval.metrics import evaluate_rows
 from src.ingest.ffmpeg_video import Av1Capture
+from src.output.overlays import annotate_plate_reads, plate_label
 from src.output.run_guard import OutputSpaceError, output_run
 from src.recognition.evidence import recognition_evidence
 from src.tracking.track_state import TrackState
@@ -15,6 +18,22 @@ from src.utils.device import CudaUnavailable, require_cuda
 
 
 class ProductionTests(unittest.TestCase):
+    def test_plate_overlay_shows_only_accepted_plate_numbers_and_boxes(self):
+        read = {"plate_bbox_xyxy": [15, 30, 75, 48], "ocr_normalized": "MH12AA5555",
+                "recognition_status": "READ", "vehicle_bbox_xyxy": [2, 2, 230, 96]}
+        uncertain = dict(read, plate_bbox_xyxy=[160, 30, 220, 48], recognition_status="LOW_CONFIDENCE")
+        frame = np.zeros((100, 240, 3), dtype=np.uint8)
+        result = annotate_plate_reads(frame, [read, uncertain])
+        self.assertTrue(np.any(result[30, 15]))
+        self.assertTrue(np.any(result[52:80, 15:155]))
+        self.assertFalse(np.any(result[:, 160:]))
+        self.assertFalse(np.any(result[:29]))
+        self.assertFalse(np.any(frame))
+        confirmed = dict(uncertain, track_recognition_status="READ", track_consensus="MH12AA5555")
+        self.assertEqual(plate_label(confirmed), "MH12AA5555")
+        self.assertIsNone(plate_label(dict(confirmed, ocr_normalized="MH12AA5556")))
+        self.assertIsNone(plate_label(dict(read, plate_bbox_xyxy=None)))
+
     @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "optional system FFmpeg")
     def test_system_av1_reads_a_bounded_exact_frame_count(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -81,6 +100,31 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(recognition_evidence(no_char_scores, *args)[2], "LOW_CONFIDENCE")
         with self.assertRaises(ValueError):
             validate_config(dict(load_config(), ocr_engine="awiros", awiros_review=True))
+
+    def test_paddle_recovery_needs_independent_agreement_or_track_evidence(self):
+        cfg = dict(load_config(), paddle_ocr_fallback=True, paddle_temporal_recovery=True)
+        quality = {"too_small": False, "blurry": False, "contrast": 150}
+        detection = {"score": .95}
+        fallback = {"independent": True, "normalized": "MH01EC9861", "raw_score": .96,
+                    "scores": [.96, .95]}
+        primary = {"raw": "MH01EC98", "minimum_char_score": .85, "raw_score": .92}
+        association = {"state": "ASSOCIATED"}
+        text, _, status, evidence = recognition_evidence(primary, quality, detection, association, False, [fallback], cfg)
+        self.assertEqual((text, status), ("MH01EC9861", "LOW_CONFIDENCE"))
+        self.assertTrue(evidence["supports_track_read"])
+        self.assertFalse(evidence["supports_plate_read"])
+        agreed = dict(primary, raw="MHO1EC9861")
+        self.assertEqual(recognition_evidence(agreed, quality, detection, association, False, [fallback], cfg)[2], "READ")
+        marked = dict(fallback, normalized="MH01EC9861IND", scores=[.96, .7], lines=[
+            {"text": "MH01EC9861", "score": .96, "bbox": [25, 4, 205, 34]},
+            {"text": "IND", "score": .7, "bbox": [4, 20, 22, 29]},
+        ])
+        text, _, status, _ = recognition_evidence(agreed, quality, detection, association, False, [marked], cfg)
+        self.assertEqual((text, status), ("MH01EC9861", "READ"))
+        for weaker in (dict(fallback, scores=[.99, .7]), dict(fallback, confidence_role="review_only")):
+            text, _, status, evidence = recognition_evidence(primary, quality, detection, association, False, [weaker], cfg)
+            self.assertEqual((text, status), ("MH01EC98", "LOW_CONFIDENCE"))
+            self.assertFalse(evidence["supports_track_read"])
 
     def test_track_keeps_a_review_consensus_separate_from_primary_evidence(self):
         state = TrackState()

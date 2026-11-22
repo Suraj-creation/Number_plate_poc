@@ -9,6 +9,7 @@ import cv2
 
 from src.detectors.plate import PlateDetector
 from src.detectors.vehicle import VehicleDetector
+from src.output.overlays import annotate_plate_reads
 from src.output.writers import safe_source
 from src.pipeline.association import plate_association
 from src.pipeline.geometry import box_iou, clip_box, deduplicate_plates, expand_box, map_detections, mapped_detections, recovery_tiles
@@ -161,7 +162,10 @@ class FramePipeline:
             clipped = x1 == 0 or y1 == 0 or x2 == w or y2 == h
             quality = assess_crop(frame[y1:y2, x1:x2], self.cfg["min_plate_width_px"],
                                   self.cfg["blur_laplacian_min"], self.cfg["min_plate_height_px"])
-            alternatives = self._alternatives(crop, primary, quality)
+            recovery_crop = (not clipped and not quality["too_small"] and not quality["blurry"]
+                             and quality["contrast"] >= self.cfg["min_plate_contrast"]
+                             and d["score"] >= self.cfg["plate_read_threshold"])
+            alternatives = self._alternatives(crop, primary, quality, recovery_crop)
             text, fmt, status, evidence = recognition_evidence(primary, quality, d, association,
                                                                 clipped, alternatives, self.cfg)
             vehicle_index = association["vehicle_index"]
@@ -173,7 +177,8 @@ class FramePipeline:
             vote = {}
             if track_id is not None:
                 temporal_observation = {
-                    "ocr_normalized": text, "quality_score": quality["quality_score"],
+                    "ocr_normalized": text if not self.cfg.get("paddle_temporal_recovery") or fmt["plausible"] else "",
+                    "quality_score": quality["quality_score"],
                     "crop_readable": not (quality["too_small"] or quality["blurry"] or clipped),
                     "supports_track_read": evidence["supports_track_read"],
                     "fingerprint": hashlib.blake2b(crop.tobytes(), digest_size=12).hexdigest(),
@@ -221,7 +226,10 @@ class FramePipeline:
                          if r["recognition_status"] == "READ" and r["vehicle_track_id"] is not None}:
             self.track_state.active[track_id]["reads"] += 1
         stage("ocr")
-        annotated = self._annotate(frame, vehicles, rows)
+        if self.tracker is not None and self.cfg.get("video_overlay") == "plates":
+            annotated = annotate_plate_reads(frame, rows)
+        else:
+            annotated = self._annotate(frame, vehicles, rows)
         stages["total"] = round((time.perf_counter() - started) * 1000, 3)
         self.timings.append(stages)
         for row in rows:
@@ -229,7 +237,7 @@ class FramePipeline:
         self.frame_index += 1
         return annotated, rows, vehicles
 
-    def _alternatives(self, crop, primary: dict, quality: dict) -> list[dict]:
+    def _alternatives(self, crop, primary: dict, quality: dict, recovery_crop: bool = True) -> list[dict]:
         score = primary.get("raw_score") or 0
         plausible = validate_indian_format(normalize_text(primary.get("raw")))["plausible"]
         alternatives = []
@@ -238,7 +246,8 @@ class FramePipeline:
             if self.cfg["recovery_views"]:
                 for label, pixels in recovery_views(crop, quality):
                     alternatives.append((label, self.ocr.predict(pixels), False))
-            if self.paddle and (not plausible or score < self.cfg["paddle_ocr_trigger_score"]
+            if self.paddle and (recovery_crop or not self.cfg.get("paddle_temporal_recovery")) and (
+                                not plausible or score < self.cfg["paddle_ocr_trigger_score"]
                                 or (primary.get("minimum_char_score") or 0) < self.cfg["ocr_min_char_threshold"]):
                 alternatives.append(("original", self.paddle.predict(crop), True))
             if self.awiros_review:
