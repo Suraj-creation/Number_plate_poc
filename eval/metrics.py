@@ -58,7 +58,7 @@ def ratio(numerator, denominator):
 
 
 def evaluate(predictions_path: Path, ground_truth_path: Path, iou_threshold: float = 0.5,
-             *, detailed: bool = False) -> dict:
+             *, detailed: bool = False, plate_overlays: bool = False) -> dict:
     if not 0 < iou_threshold <= 1:
         raise ValueError("IoU threshold must be in (0, 1].")
     payload = json.loads(predictions_path.read_text(encoding="utf-8"))
@@ -74,7 +74,51 @@ def evaluate(predictions_path: Path, ground_truth_path: Path, iou_threshold: flo
     if detailed:
         from eval.diagnostics import diagnose
         scores["diagnostics"], _ = diagnose(payload, truth, iou_threshold)
+    if plate_overlays:
+        scores["plate_overlays"] = evaluate_plate_overlays(payload, truth, iou_threshold)
     return scores
+
+
+def evaluate_plate_overlays(payload, truth, threshold=0.5):
+    """Compare displayed text on the same manually labeled plate boxes."""
+    from src.output.overlays import plate_label
+
+    frames = defaultdict(list)
+    identities = set()
+    for row in truth:
+        text = normalize_text(row.get("ground_truth"))
+        box = parse_box(row.get("plate_bbox_xyxy"))
+        if text and box:
+            identity = (row["source"], row.get("vehicle_track_id") or text)
+            frames[frame_key(row)].append((box, text, identity))
+            identities.add(identity)
+    predictions = defaultdict(list)
+    for row in payload.get("observations", []):
+        key = frame_key(row)
+        if key in frames and row.get("plate_bbox_xyxy"):
+            predictions[key].append(row)
+    results = {}
+    for name, use_plate_track in (("vehicle_tracks", False), ("vehicle_and_plate_tracks", True)):
+        correct_identities = set()
+        counts = dict(matched_boxes=0, exact=0, incorrect=0, abstained=0)
+        for key, labels in frames.items():
+            candidates = predictions[key]
+            matches = match_boxes([box for box, _, _ in labels],
+                                  [row["plate_bbox_xyxy"] for row in candidates], threshold)
+            counts["matched_boxes"] += len(matches)
+            for label_index, prediction_index in matches:
+                _, expected, identity = labels[label_index]
+                text = plate_label(candidates[prediction_index], use_plate_track=use_plate_track)
+                if text == expected:
+                    counts["exact"] += 1
+                    correct_identities.add(identity)
+                elif text:
+                    counts["incorrect"] += 1
+                else:
+                    counts["abstained"] += 1
+        results[name] = {**counts, "distinct_correct": len(correct_identities)}
+    return {"reference_frames": len(frames), "reference_boxes": sum(map(len, frames.values())),
+            "reference_identities": len(identities), **results}
 
 
 def evaluate_rows(payload, truth, threshold=0.5):

@@ -10,6 +10,8 @@ CSV columns include `source`, `frame_index` (blank for images), `plate_bbox_xyxy
 
 The evaluator restricts metrics to listed frames and uses maximum one-to-one IoU matching within each frame. It reports OCR exact match and character error rate on matched detections and across all supplied text labels, including missed boxes. Track IDs are matched by one-to-one observation overlap within each source. Track switch counts use matched plate observations. Per-condition metrics use the optional `condition` field, which should be consistent for each frame in the CSV.
 
+For plate-only video exports, add `--plate-overlays` to score the numbers that appear on-screen. This compares the same detections with and without independent plate tracks and reports exact reads, incorrect reads, abstentions, and distinct correctly read vehicles on the annotated frames.
+
 ## Public sample
 
 The [DataCluster Labs sample](https://huggingface.co/datasets/Dataclusterlabspvtltd/indian-number-plates-dataset/tree/2bb7cd4e46e58af4f6fa413ce8e205ac69e605a7) includes Pascal VOC boxes and some nested `number_plate_text` attributes. Its license permits non-commercial evaluation. Keep media and labels in a local scratch directory. To reproduce the comparison, use the 28 image IDs listed in [sample_manifest.csv](sample_manifest.csv) and the corresponding `Annotations/` entries.

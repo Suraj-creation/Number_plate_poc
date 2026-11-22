@@ -1,4 +1,5 @@
 video_overlay: plates
 paddle_ocr_fallback: true
 paddle_temporal_recovery: true
+plate_track_recovery: true
 paddle_evidence_threshold: 0.90

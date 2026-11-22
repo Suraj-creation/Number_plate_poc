@@ -6,6 +6,7 @@ ocr_model: cct-s-v2-global-model
 ocr_engine: fast-plate-ocr
 paddle_ocr_fallback: false
 paddle_temporal_recovery: false
+plate_track_recovery: false
 awiros_review: false
 paddle_ocr_trigger_score: 0.82
 vehicle_threshold: 0.35

@@ -53,9 +53,10 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual((text, status), ("", "LOW_CONFIDENCE"))
 
     def test_indian_formats_keep_legacy_and_current_state_codes(self):
-        for plate in ("DL1CAA1234", "DL04C1969", "TG13E0143", "TS13E0143", "22BH1234AA"):
+        for plate in ("DL1CAA1234", "DL04C1969", "TG13E0143", "TS13E0143", "22BH1234AA", "24BH2345L"):
             self.assertTrue(validate_indian_format(plate)["plausible"])
-        self.assertFalse(validate_indian_format("DL0CAA1234")["plausible"])
+        for plate in ("DL0CAA1234", "24BH0000A", "24BH2345I", "24BH2345LO"):
+            self.assertFalse(validate_indian_format(plate)["plausible"])
 
     def test_quality_measured_on_original_pixels(self):
         image = np.full((10, 47, 3), 25, dtype=np.uint8)

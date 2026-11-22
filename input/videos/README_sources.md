@@ -39,3 +39,19 @@ ANPR_OFFLINE=1 python -m src.cli video --input input/videos/mumbai_readable_plat
 ```
 
 The configuration uses the optional PaddleOCR environment. Set `ANPR_PADDLE_PYTHON` to that environment's Python executable. The download used for the test had SHA-256 `e688aa982373e63c2dc88c1fe2ced4c3a1b9e4851a22075cf09c3e4adc671c0e`.
+
+## Pune traffic 125-second excerpt
+
+The test used seconds 15–140 from one daylight Pune drive. The source includes a transition around 45 seconds. The prepared clip uses the upper 3840×960 of the original 3840×2160 frame to focus on the windshield, samples at 5 fps, and covers the same 125 seconds at normal playback speed. [Pune footage by Drive Wid Ash](https://www.youtube.com/watch?v=XYDrIAZoMGQ)
+
+Given the first 142 seconds of the 2160p VP9 video stream as `pune-source.webm`, prepare and run the input with the same flags used for validation.
+
+```bash
+ffmpeg -threads 10 -ss 15 -i pune-source.webm -t 125 -map 0:v:0 \
+  -filter_threads 4 -vf 'crop=3840:960:0:0,fps=5' -c:v libx264 -threads 5 \
+  -preset veryfast -crf 17 -pix_fmt yuv420p -movflags +faststart input/videos/pune_traffic_125s.mp4
+ANPR_OFFLINE=1 python -m src.cli video --input input/videos/pune_traffic_125s.mp4 \
+  --config configs/readable_video.yaml --output output/pune_traffic --stride 1
+```
+
+The prepared input contained 625 frames and had SHA-256 `c826486f75619320c83e3b684cb6ff49485b1964a7b9aa4a02dedb7157f5a728`. Use the optional PaddleOCR environment described above. [Validation results](../../eval/pune_video_results.md)

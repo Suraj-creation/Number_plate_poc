@@ -14,7 +14,8 @@ def _digit_candidate(text: str) -> str:
     if validate_indian_format(text)["plausible"] or not 9 <= len(text) <= 11:
         return text
     candidates = set()
-    for index in (2, 3, *range(len(text) - 4, len(text))):
+    positions = (0, 1, 4, 5, 6, 7) if text[2:4] == "BH" else (2, 3, *range(len(text) - 4, len(text)))
+    for index in positions:
         digit = {"O": "0", "D": "0", "S": "5", "B": "8"}.get(text[index])
         if digit:
             candidate = text[:index] + digit + text[index + 1:]
@@ -136,6 +137,7 @@ def recognition_evidence(primary: dict, quality: dict, detection: dict, associat
         "reasons": reasons, "independent_agreement": agreement, "independent_disagreement": disagreement,
         "read_basis": direct_basis if status == "READ" else None,
         "supports_track_read": bool(track_support and association["state"] == "ASSOCIATED"),
+        "supports_plate_consensus": bool(track_support),
         "supports_plate_read": bool(direct_basis),
         "candidate_source": "paddle_ocr" if recovered else "primary",
     }

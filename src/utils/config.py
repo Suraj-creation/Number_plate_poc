@@ -44,6 +44,7 @@ def apply_profile(cfg: dict, profile: str) -> dict:
 def validate_config(cfg: dict) -> dict:
     cfg.setdefault("video_overlay", "full")
     cfg.setdefault("paddle_temporal_recovery", False)
+    cfg.setdefault("plate_track_recovery", False)
     if not re.fullmatch(r"cpu|cuda(?::[0-9]+)?", str(cfg["device"])):
         raise ValueError("device must be cpu, cuda, or cuda:<index>.")
     if cfg["device"] == "cuda":
@@ -71,7 +72,7 @@ def validate_config(cfg: dict) -> dict:
     if type(cfg["min_output_free_mib"]) is not int or cfg["min_output_free_mib"] < 0:
         raise ValueError("min_output_free_mib must be a non-negative integer.")
     for key in ("save_plate_crops", "vehicle_tiles", "plate_tiles", "recovery_views", "paddle_ocr_fallback",
-                "paddle_temporal_recovery", "allow_cpu_fallback", "awiros_review"):
+                "paddle_temporal_recovery", "plate_track_recovery", "allow_cpu_fallback", "awiros_review"):
         if type(cfg[key]) is not bool:
             raise ValueError(f"{key} must be true or false.")
     if cfg["plate_inference_batch_size"] > 8:

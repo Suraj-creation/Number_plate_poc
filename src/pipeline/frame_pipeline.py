@@ -19,6 +19,7 @@ from src.recognition.fast_plate_ocr import FastPlateOCR
 from src.recognition.india_format import validate_indian_format
 from src.recognition.normalize import normalize_text
 from src.tracking.bytetrack import ByteTracker
+from src.tracking.plate_reads import PlateReadTracker
 from src.tracking.track_state import TrackState
 from src.utils.device import require_cuda
 
@@ -54,6 +55,7 @@ class FramePipeline:
             self.awiros_review = AwirosOCR()
         self.tracker = ByteTracker(cfg["tracker_track_activation_threshold"], cfg["tracker_lost_track_buffer"],
                                    cfg["tracker_match_threshold"]) if enable_tracking else None
+        self.plate_read_tracker = PlateReadTracker(cfg) if enable_tracking and cfg.get("plate_track_recovery") else None
         self.track_state = TrackState(cfg["track_history_size"], cfg)
         self.frame_index = 0
         self.timings: list[dict] = []
@@ -225,6 +227,8 @@ class FramePipeline:
         for track_id in {r["vehicle_track_id"] for r in rows
                          if r["recognition_status"] == "READ" and r["vehicle_track_id"] is not None}:
             self.track_state.active[track_id]["reads"] += 1
+        if self.plate_read_tracker is not None:
+            self.plate_read_tracker.update(frame, rows, self.frame_index, int(timestamp_ms))
         stage("ocr")
         if self.tracker is not None and self.cfg.get("video_overlay") == "plates":
             annotated = annotate_plate_reads(frame, rows)

@@ -64,7 +64,7 @@ export ANPR_PADDLE_PYTHON="$PWD/.venv-paddle/bin/python"
 
 Enable **Use optional PaddleOCR second opinion** in the UI or set `paddle_ocr_fallback: true` in a CLI override. The assets must be present and match the configured hashes. See the [PaddleOCR project documentation](https://paddlepaddle.github.io/PaddleOCR/main/en/version3.x/algorithm/PP-OCRv5/PP-OCRv5.html).
 
-The [readable video configuration](configs/readable_video.yaml) enables plate-only overlays and PaddleOCR temporal recovery. A recovered number needs agreement from the primary reader or consistent evidence across a vehicle track. The per-frame export retains the original OCR string and identifies the reader that supplied the selected candidate. See the [source clip and preparation command](input/videos/README_sources.md#readable-mumbai-street-excerpt) and the [measured results](eval/readable_video_results.md).
+The [readable video configuration](configs/readable_video.yaml) enables plate-only overlays, PaddleOCR recovery, and independent plate tracking. A recovered number needs reader agreement or repeated evidence across a vehicle or plate track. Plate tracking can confirm a number when nearby vehicles overlap, while the export continues to report the vehicle association separately. See the [source and preparation commands](input/videos/README_sources.md#pune-traffic-125-second-excerpt) and [measured results](eval/pune_video_results.md).
 
 ## Test and evaluate
 

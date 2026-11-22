@@ -7,11 +7,12 @@ from pathlib import Path
 import numpy as np
 
 from eval.diagnostics import diagnose, edit_alignment
-from eval.metrics import evaluate_rows
+from eval.metrics import evaluate_plate_overlays, evaluate_rows
 from src.ingest.ffmpeg_video import Av1Capture
 from src.output.overlays import annotate_plate_reads, plate_label
 from src.output.run_guard import OutputSpaceError, output_run
 from src.recognition.evidence import recognition_evidence
+from src.tracking.plate_reads import PlateReadTracker
 from src.tracking.track_state import TrackState
 from src.utils.config import load_config, validate_config
 from src.utils.device import CudaUnavailable, require_cuda
@@ -33,6 +34,48 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(plate_label(confirmed), "MH12AA5555")
         self.assertIsNone(plate_label(dict(confirmed, ocr_normalized="MH12AA5556")))
         self.assertIsNone(plate_label(dict(read, plate_bbox_xyxy=None)))
+
+    def test_plate_track_requires_distinct_crops_and_current_matching_text(self):
+        tracker = PlateReadTracker(load_config())
+        frame = np.zeros((100, 160, 3), dtype=np.uint8)
+        row = {"plate_bbox_xyxy": [26, 30, 91, 52], "plate_crop_bbox_xyxy": [24, 28, 93, 54],
+               "plate_detection_confidence": .96, "quality_score": .95, "ocr_normalized": "MH12AA5555",
+               "recognition_status": "UNASSOCIATED", "recognition_evidence": {"supports_plate_consensus": True}}
+        for index in range(4):
+            observation = dict(row)
+            if index >= 2:
+                frame[30, 26] = 1
+            if index == 3:
+                observation["ocr_normalized"] = "MH12AA5556"
+                observation["recognition_evidence"] = {"supports_plate_consensus": False}
+            tracker.update(frame, [observation], index, index * 240)
+            self.assertEqual(plate_label(observation), "MH12AA5555" if index == 2 else None)
+
+    def test_plate_overlay_abstains_on_conflicts_and_short_fallback_tracks(self):
+        row = {"plate_bbox_xyxy": [26, 30, 91, 52], "ocr_normalized": "MH12AA5555",
+               "recognition_status": "UNASSOCIATED", "plate_track_status": "READ",
+               "plate_track_consensus": "MH12AA5555", "plate_track_evidence_frames": [1, 2, 3, 4],
+               "recognition_evidence": {"candidate_source": "paddle_ocr", "independent_agreement": False}}
+        self.assertIsNone(plate_label(row))
+        self.assertEqual(plate_label(dict(row, plate_track_evidence_frames=[1, 2, 3, 4, 5])), "MH12AA5555")
+        conflict = dict(row, ocr_normalized="MH12AA5556", recognition_evidence={"supports_plate_read": True})
+        self.assertIsNone(plate_label(conflict))
+        self.assertEqual(plate_label(conflict, use_plate_track=False), "MH12AA5556")
+        self.assertEqual(plate_label(dict(conflict, recognition_status="READ")), "MH12AA5556")
+
+    def test_plate_overlay_ablation_compares_the_same_boxes(self):
+        truth = [{"source": "clip", "frame_index": i, "plate_bbox_xyxy": "20,20,80,45",
+                  "ground_truth": "MH12AA5555", "vehicle_track_id": "reference"} for i in range(2)]
+        prediction = {"source": "clip", "plate_bbox_xyxy": [20, 20, 80, 45],
+                      "recognition_status": "UNASSOCIATED", "plate_track_status": "READ"}
+        matches = [dict(prediction, frame_index=i, ocr_normalized=text, plate_track_consensus=text)
+                   for i, text in enumerate(("MH12AA5555", "MH12AA5556"))]
+        scores = evaluate_plate_overlays({"observations": matches}, truth)
+        self.assertEqual(scores["reference_identities"], 1)
+        self.assertEqual(scores["vehicle_tracks"], dict(matched_boxes=2, exact=0, incorrect=0,
+                                                        abstained=2, distinct_correct=0))
+        self.assertEqual(scores["vehicle_and_plate_tracks"], dict(matched_boxes=2, exact=1, incorrect=1,
+                                                                  abstained=0, distinct_correct=1))
 
     @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "optional system FFmpeg")
     def test_system_av1_reads_a_bounded_exact_frame_count(self):
