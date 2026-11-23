@@ -76,6 +76,8 @@ python -m eval.run_eval --predictions output/day/traffic.json --ground-truth eva
 
 The opt-in GPU test uses actual pretrained models and a locally prepared traffic video. A GitHub checkout includes the preparation notes and links to the source clips. See [video fixture sources](input/videos/README_sources.md). For the optional browser test, install Playwright in a separate test environment, start the local app, and run `python tests/browser_smoke.py`. The [evaluation guide](eval/README.md) documents ground-truth fields, metrics, and the public-sample comparison.
 
+The 2:02 roadside demo exercises cars, two-wheelers, auto-rickshaws, trucks, buses, and an ambulance. Its benchmark includes source-verified plate reads by vehicle type. [Mixed roadside validation](eval/mixed_roadside_results.md)
+
 ## Published results
 
 The [v0.2.0 release](https://github.com/Suraj-creation/Number_plate_poc/releases/tag/v0.2.0) contains the full day and night result ZIPs. Each contains an annotated MP4, JSON evidence, CSV observations, and the run's model manifest. See the [aggregate regression data](eval/regression_results.json) and [archive checksums](eval/published_artifacts.sha256).

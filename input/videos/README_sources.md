@@ -55,3 +55,37 @@ ANPR_OFFLINE=1 python -m src.cli video --input input/videos/pune_traffic_125s.mp
 ```
 
 The prepared input contained 625 frames and had SHA-256 `c826486f75619320c83e3b684cb6ff49485b1964a7b9aa4a02dedb7157f5a728`. Use the optional PaddleOCR environment described above. [Validation results](../../eval/pune_video_results.md)
+
+## Mixed roadside traffic 122-second edit
+
+The demo joins five outdoor roadside shots in the order below. Each excerpt starts at the beginning of its source. The 3840×1440 crop keeps the original plate pixels in the lower portion of the 4K frames. The 5 fps input preserves playback speed. [Pexels license](https://www.pexels.com/license/)
+
+| Start in edit | Duration | Source |
+| --- | ---: | --- |
+| 0:00 | 20 s | [Busy Indian Street with Traffic and Vehicles by aksinfo7 universe](https://www.pexels.com/video/busy-indian-street-with-traffic-and-vehicles-30381636/) |
+| 0:20 | 30 s | [Busy Urban Traffic Scene in Mumbai City by aksinfo7 universe](https://www.pexels.com/video/busy-urban-traffic-scene-in-mumbai-city-30400506/) |
+| 0:50 | 27 s | [Bustling Urban Street Scene in Mumbai Daytime by aksinfo7 universe](https://www.pexels.com/video/bustling-urban-street-scene-in-mumbai-daytime-30262835/) |
+| 1:17 | 29 s | [Bustling City Street Traffic in Mumbai by aksinfo7 universe](https://www.pexels.com/video/bustling-city-street-traffic-in-mumbai-30441035/) |
+| 1:46 | 16 s | [Busy Street India by Tarun Suthar](https://www.pexels.com/video/busy-street-india-indian-streets-street-27000602/) |
+
+Prepare the input in a local working directory and run from the repository with the optional PaddleOCR environment configured.
+
+```bash
+work=$(mktemp -d)
+ids=(30381636 30400506 30262835 30441035 27000602)
+lengths=(20 30 27 29 16)
+for i in "${!ids[@]}"; do
+  id=${ids[$i]}
+  curl -fL "https://www.pexels.com/download/video/$id/" -o "$work/$id.mp4"
+  ffmpeg -v error -threads 4 -i "$work/$id.mp4" -t "${lengths[$i]}" -an \
+    -filter_threads 2 -vf 'crop=3840:1440:0:720,fps=5' \
+    -c:v libx264 -threads 3 -preset veryfast -crf 16 -pix_fmt yuv420p "$work/mix-$id.mp4"
+  printf "file '%s/mix-%s.mp4'\n" "$work" "$id" >> "$work/segments.txt"
+done
+ffmpeg -v error -f concat -safe 0 -i "$work/segments.txt" -c copy \
+  -movflags +faststart "$work/mixed_roadside_122s.mp4"
+ANPR_OFFLINE=1 python -m src.cli video --input "$work/mixed_roadside_122s.mp4" \
+  --config configs/readable_video.yaml --output output/mixed_roadside --stride 1
+```
+
+The benchmark input had 610 frames and SHA-256 `e2bfc09b3c2263d520d56b202e8f42ba96604f135b2b2c84cfef8ba983145d96`. [Per-vehicle results](../../eval/mixed_roadside_results.md)
